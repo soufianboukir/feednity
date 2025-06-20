@@ -83,7 +83,7 @@ export const authOptions:NextAuthOptions  = {
                 token.id = user.id;
                 token.name = user.name;
                 token.email = user.email;
-                token.image = user.image;
+                token.image = user.picture || user.image; 
                 token.plan = user.plan;
                 token.isVerified = user.isVerified;
             }
