@@ -82,13 +82,16 @@ export function SignUpForm({
           confirmPassword: "",
         });
         router.push("/verify-user");
-    } catch (err: any) {
-      const message =
-        err?.response?.data?.error || err?.message || "Network error. Please try again.";
-      setError(message);
-    } finally {
-      setLoading((l) => ({ ...l, credentials: false }));
-    }
+      } catch (err: unknown) {
+        if (typeof err === "object" && err !== null && "response" in err) {
+          const axiosError = err as { response?: { data?: { error?: string } } };
+          setError(axiosError.response?.data?.error || "Network error. Please try again.");
+        } else {
+          setError("Network error. Please try again.");
+        }
+      } finally {
+        setLoading((l) => ({ ...l, credentials: false }));  
+      }
   }
 
   return (

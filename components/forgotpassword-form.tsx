@@ -52,10 +52,13 @@ export function ForgotPasswordForm({
       } else {
         setError("Failed to send reset link. Please try again later.");
       }
-    } catch (err: any) {
-      const message =
-        err?.response?.data?.error || err?.message || "Network error. Please try again.";
-      setError(message);
+    } catch (err: unknown) {
+      if (typeof err === "object" && err !== null && "response" in err) {
+        const axiosError = err as { response?: { data?: { error?: string } } };
+        setError(axiosError.response?.data?.error || "Network error. Please try again.");
+      } else {
+        setError("Network error. Please try again.");
+      }
     } finally {
       setLoading(false);
     }

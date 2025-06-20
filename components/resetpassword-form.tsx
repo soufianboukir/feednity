@@ -64,8 +64,13 @@ export function ResetPasswordForm({
       } else {
         setError("Failed to reset password. Please try again.");
       }
-    } catch (err: any) {
-      setError(err?.response?.data?.error || "Network error. Please try again.");
+    } catch (err: unknown) {
+      if (typeof err === "object" && err !== null && "response" in err) {
+        const axiosError = err as { response?: { data?: { error?: string } } };
+        setError(axiosError.response?.data?.error || "Network error. Please try again.");
+      } else {
+        setError("Network error. Please try again.");
+      }
     } finally {
       setLoading(false);
     }

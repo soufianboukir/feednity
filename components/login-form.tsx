@@ -54,13 +54,14 @@ export function LoginForm() {
         }
       }
     } catch (err: unknown) {
-      const message =
-        typeof err === "object" && err !== null && "message" in err
-          ? (err as any).message
-          : "Network error. Please try again.";
-      setError(message);
+      if (typeof err === "object" && err !== null && "response" in err) {
+        const axiosError = err as { response?: { data?: { error?: string } } };
+        setError(axiosError.response?.data?.error || "Network error. Please try again.");
+      } else {
+        setError("Network error. Please try again.");
+      }
     } finally {
-      setLoading((l) => ({ ...l, credentials: false }));
+      setLoading((l) => ({ ...l, credentials: false }));  
     }
   }
 

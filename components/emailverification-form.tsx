@@ -51,14 +51,18 @@ export function EmailVerificationForm({
 
       if (response.status === 200) {
         setSuccess("Your email has been verified successfully!");
+        localStorage.removeItem('email')
         setTimeout(() => router.push("/login"), 1500);
       } else {
         setError(response.data.message || "Invalid code");
       }
-    } catch (err: any) {
-      const message =
-        err?.response?.data?.error || err?.message || "Network error. Please try again.";
-      setError(message);
+    } catch (err: unknown) {
+      if (typeof err === "object" && err !== null && "response" in err) {
+        const axiosError = err as { response?: { data?: { error?: string } } };
+        setError(axiosError.response?.data?.error || "Network error. Please try again.");
+      } else {
+        setError("Network error. Please try again.");
+      }
     } finally {
       setLoading(false);
     }
@@ -82,10 +86,15 @@ export function EmailVerificationForm({
       } else {
         setError(response.data.message || "Failed to resend code.");
       }
-    } catch (err: any) {
-      setError(err.response?.data?.message || "Error sending code.");
+    } catch (err: unknown) {
+      if (typeof err === "object" && err !== null && "response" in err) {
+        const axiosError = err as { response?: { data?: { error?: string } } };
+        setError(axiosError.response?.data?.error || "Network error. Please try again.");
+      } else {
+        setError("Network error. Please try again.");
+      }
     } finally {
-      setResending(false);
+      setLoading(false);
     }
   }
 
