@@ -18,7 +18,6 @@ export async function saveVerificationCode(email: string) {
         code,
         expiresAt,
         used: false,
-        type: "email_verification",
     });
 
     await verificationDoc.save();

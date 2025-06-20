@@ -75,3 +75,22 @@ function InputOTPSeparator({ ...props }: React.ComponentProps<"div">) {
 }
 
 export { InputOTP, InputOTPGroup, InputOTPSlot, InputOTPSeparator }
+
+export function InputOtp({
+  value,
+  onChange,
+}: {
+  value: string;
+  onChange: (val: string) => void;
+}) {
+  return (
+    <InputOTP maxLength={6} value={value} onChange={onChange}>
+      {[...Array(6)].map((_, i) => (
+        <InputOTPGroup key={i}>
+          <InputOTPSlot index={i} className="w-12 h-12 text-xl" />
+        </InputOTPGroup>
+      ))}
+    </InputOTP>
+  );
+}
+

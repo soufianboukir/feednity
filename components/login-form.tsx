@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { signIn } from "next-auth/react";
+import { getSession, signIn } from "next-auth/react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import {
@@ -15,6 +15,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import Link from "next/link";
 import GoogleContinue from "./google-continue";
+import { resendCode } from "@/services/auth";
 
 
 export function LoginForm() {
@@ -31,18 +32,35 @@ export function LoginForm() {
     setError(null);
     setLoading((l) => ({ ...l, credentials: true }));
 
-    const result = await signIn("credentials", {
-      redirect: false,
-      email,
-      password,
-    });
 
-    setLoading((l) => ({ ...l, credentials: false }));
-
-    if (result?.error) {
-      setError(result.error);
-    } else if (result?.ok) {
-      window.location.href = "/panel";
+    try {
+      const result = await signIn("credentials", {
+        redirect: false,
+        email,
+        password,
+      });
+  
+      if (result?.error) {
+        setError(result.error);
+      } else if (result?.ok) {
+        const session = await getSession();
+  
+        if (session?.user?.isVerified) {
+          window.location.href = "/panel";
+        } else {
+          setLoading((l) => ({ ...l, credentials: true }));
+          await resendCode(email);
+          window.location.href = "/verify-user";
+        }
+      }
+    } catch (err: unknown) {
+      const message =
+        typeof err === "object" && err !== null && "message" in err
+          ? (err as any).message
+          : "Network error. Please try again.";
+      setError(message);
+    } finally {
+      setLoading((l) => ({ ...l, credentials: false }));
     }
   }
 

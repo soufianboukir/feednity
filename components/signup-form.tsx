@@ -41,7 +41,6 @@ export function SignUpForm({
   });
 
   const [error, setError] = useState<string | null>(null);
-  const [success, setSuccess] = useState<string | null>(null);
 
   const router = useRouter();
 
@@ -55,7 +54,6 @@ export function SignUpForm({
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setError(null);
-    setSuccess(null);
 
     if (!formData.name.trim()) return setError("Name is required");
     if (!formData.email.trim()) return setError("Email is required");
@@ -76,7 +74,6 @@ export function SignUpForm({
       });
 
       if (response.status === 200)
-        setSuccess("Registered successfully! Please check your email to verify your account.");
         localStorage.setItem("email", formData.email);
         setFormData({
           name: "",
@@ -166,7 +163,6 @@ export function SignUpForm({
                 </div>
 
                 {error && <p className="text-red-600 text-sm">{error}</p>}
-                {success && <p className="text-green-600 text-sm">{success}</p>}
 
                 <Button
                   type="submit"

@@ -39,12 +39,12 @@ export const authOptions:NextAuthOptions  = {
                 }
         
                 return {
-                        id: user._id.toString(),
-                        name: user.name,
-                        email: user.email,
-                        image: user.picture,
-                        plan: user.plan,
-                        isVerified: user.isVerified,
+                    id: user._id.toString(),
+                    name: user.name,
+                    email: user.email,
+                    image: user.picture,
+                    plan: user.plan,
+                    isVerified: user.isVerified,
                 };
             },
         }),
@@ -81,12 +81,22 @@ export const authOptions:NextAuthOptions  = {
         async jwt({ token, user }:{ token: JWT;user?: UserType}) {
             if (user) {
                 token.id = user.id;
+                token.name = user.name;
+                token.email = user.email;
+                token.image = user.image;
+                token.plan = user.plan;
+                token.isVerified = user.isVerified;
             }
             return token;
         },
         async session({ session, token }:{ session: Session;token: JWT;}) {
             if (session.user) {
                 session.user.id = token.id as string;
+                session.user.name = token.name as string;
+                session.user.email = token.email as string;
+                session.user.image = token.image as string;
+                session.user.plan = token.plan as "free" | "pro";
+                session.user.isVerified = token.isVerified as boolean;
             }
             return session;
         },
