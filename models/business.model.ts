@@ -30,15 +30,6 @@ const BusinessSchema = new Schema<IBusiness>(
         },
         industry: {
             type: String,
-            enum: [
-                "Restaurant",
-                "Salon",
-                "Software",
-                "Retail",
-                "Clinic",
-                "Hotel",
-                "Other",
-            ],
             default: "Other",
         },
         logo: {

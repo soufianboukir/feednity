@@ -18,16 +18,9 @@ import {
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar"
 import { toast } from 'sonner'
 import { Camera } from 'lucide-react'
+import { Business } from '@/types'
+import { addBusiness, updateBusiness } from '@/services/business'
 
-interface Business {
-  _id?: string
-  name: string
-  description?: string
-  industry?: string
-  logo?: string
-  feedbackLink: string
-  qrCodeUrl?: string
-}
 
 interface BusinessDialogProps {
   open: boolean
@@ -50,7 +43,6 @@ export function BusinessDialog({
         name: '',
         description: '',
         industry: '',
-        feedbackLink: '',
         logo: ''
     })
 
@@ -60,22 +52,20 @@ export function BusinessDialog({
             name: business.name,
             description: business.description || '',
             industry: business.industry || '',
-            feedbackLink: business.feedbackLink,
             logo: business.logo || ''
         })
         if (business.logo) setLogoPreview(business.logo)
         } else {
-        resetForm()
+            resetForm()
         }
     }, [business])
 
     const resetForm = () => {
         setFormData({
-        name: '',
-        description: '',
-        industry: '',
-        feedbackLink: '',
-        logo: ''
+            name: '',
+            description: '',
+            industry: '',
+            logo: ''
         })
         setLogoPreview(null)
         if (logoInputRef.current) logoInputRef.current.value = ''
@@ -104,7 +94,6 @@ export function BusinessDialog({
         try {
         const formPayload = new FormData()
         formPayload.append('name', formData.name)
-        formPayload.append('feedbackLink', formData.feedbackLink)
         if (formData.description) formPayload.append('description', formData.description)
         if (formData.industry) formPayload.append('industry', formData.industry)
         
@@ -112,28 +101,26 @@ export function BusinessDialog({
             formPayload.append('logo', logoInputRef.current.files[0])
         }
 
-        const url = business?._id 
-            ? `/api/business/${business._id}`
-            : '/api/business'
-
         const method = business?._id ? 'PUT' : 'POST'
+        let response;
 
-        const response = await fetch(url, {
-            method,
-            body: formPayload
-        })
-
-        if (!response.ok) {
-            throw new Error(await response.text())
+        if(method === 'POST'){
+            response = await addBusiness(formPayload)
+        }else{
+            response = await updateBusiness(formPayload)
         }
-        await response.json()
+
+        if (response.status !== 200) {
+            throw new Error("Network error")
+        }
+        // await response.json()
         toast.success(business?._id ? 'Business data updated!' : 'Business successfully created!')
         resetForm()
         } catch (error) {
-        console.error('Error:', error)
-        toast.error('Operation failed. Please try again.')
+            console.error('Error:', error)
+            toast.error('Operation failed. Please try again.')
         } finally {
-        setIsLoading(false)
+            setIsLoading(false)
         }
     }
 
@@ -201,17 +188,6 @@ export function BusinessDialog({
               />
             </div>
 
-            <div className="grid gap-2">
-              <Label htmlFor="feedbackLink">Feedback Link *</Label>
-              <Input
-                id="feedbackLink"
-                name="feedbackLink"
-                value={formData.feedbackLink}
-                onChange={handleChange}
-                placeholder="https://example.com/feedback"
-                required
-              />
-            </div>
 
             <div className="grid gap-2">
               <Label htmlFor="industry">Industry</Label>

@@ -30,13 +30,16 @@ export function BusinessSwitcher({
   }[]
 }) {
   const { isMobile } = useSidebar()
-  const [avtiveBusiness, setActiveBusiness] = React.useState(businesses.length > 0 ? businesses[0] : null)
+  const [activeBusiness, setActiveBusiness] = React.useState(businesses.length > 0 ? businesses[0] : null)
   const [isBusiOpen, setIsBusiOpen] = React.useState(false)
   
 
   if (!businesses) {
     return null
   }  
+
+  console.log(activeBusiness);
+  
 
   return (
     <div>
@@ -60,8 +63,8 @@ export function BusinessSwitcher({
                   )
                 }
                 <div className="grid flex-1 text-left text-sm leading-tight">
-                  <span className="truncate font-medium">{avtiveBusiness?.name}</span>
-                  <span className="truncate text-xs">{avtiveBusiness?.industry}</span>
+                  <span className="truncate font-medium">{activeBusiness?.name}</span>
+                  <span className="truncate text-xs">{activeBusiness?.industry}</span>
                 </div>
                 <ChevronsUpDown className="ml-auto" />
               </SidebarMenuButton>
