@@ -14,3 +14,8 @@ export const updateBusiness = async (formData:FormData) =>{
     const response = await api.put('/business',formData);
     return response;
 }
+
+export const deleteBusiness = async (id: string) =>{
+    const response = await api.delete(`/business?id=${id}`)
+    return response
+}

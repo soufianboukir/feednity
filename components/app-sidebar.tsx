@@ -32,7 +32,6 @@ import { getBusinesses } from "@/services/business"
 import { toast } from "sonner"
 import { Business } from "@/types"
 
-// This is sample data.
 const data = {
   user: {
     name: "shadcn",
@@ -200,7 +199,6 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       setLoading(true)
       const getBuiss = async () =>{
         const response = await getBusinesses()
-        console.log(response);
         
         if(response.status === 200){
           setBusinesses(response.data.businesses)
@@ -250,7 +248,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader>
-        <BusinessSwitcher businesses={businesses} />
+        <BusinessSwitcher busis={businesses} />
       </SidebarHeader>
       <SidebarContent>
         <NavMain items={data.navMain} />

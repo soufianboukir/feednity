@@ -109,7 +109,7 @@ export const PUT = async (req: Request) => {
     }
 
     const formData = await req.formData()
-    const id = formData.get('id') as string
+    const id = formData.get('_id') as string
     const name = formData.get('name') as string
     const description = formData.get('description') as string | null
     const industry = formData.get('industry') as string | null
@@ -162,4 +162,37 @@ export const PUT = async (req: Request) => {
       { status: 500 }
     )
   }
+}
+
+
+export const DELETE = async (req: Request) => {
+    try {
+      await dbConnection()
+      const session = await getServerSession(authOptions)
+
+      if (!session?.user?.id) {
+        return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
+      }
+
+      const { searchParams } = new URL(req.url)
+      const id = searchParams.get('id')
+      console.log(id);
+      
+
+      if (!id) {
+        return NextResponse.json({ error: "Business ID is required" }, { status: 400 })
+      }
+
+      const business = await Business.findOne({ _id: id, owner: session.user.id })
+      if (!business) {
+        return NextResponse.json({ error: "Business not found" }, { status: 404 })
+      }
+
+      await business.deleteOne()
+
+      return NextResponse.json({ message: "Business deleted successfully" }, { status: 200 })
+    } catch (error) {
+      console.error('Error deleting business:', error)
+      return NextResponse.json({ error: "Failed to delete business" }, { status: 500 })
+    }
 }

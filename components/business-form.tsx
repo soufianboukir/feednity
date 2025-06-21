@@ -27,13 +27,15 @@ interface BusinessDialogProps {
   onOpenChange: (open: boolean) => void
   business?: Business | null
   children?: React.ReactNode
+  onUpdate: (updated:Business) => void
 }
 
 export function BusinessDialog({ 
   open, 
   onOpenChange, 
   business = null,
-  children 
+  children,
+  onUpdate
 }: BusinessDialogProps) {
     const [isLoading, setIsLoading] = useState(false)
     const [logoPreview, setLogoPreview] = useState<string | null>(null)
@@ -96,26 +98,39 @@ export function BusinessDialog({
         formPayload.append('name', formData.name)
         if (formData.description) formPayload.append('description', formData.description)
         if (formData.industry) formPayload.append('industry', formData.industry)
-        
+
         if (logoInputRef.current?.files?.[0]) {
             formPayload.append('logo', logoInputRef.current.files[0])
+        }
+
+        if (business?._id) {
+          formPayload.append('_id', business._id)
         }
 
         const method = business?._id ? 'PUT' : 'POST'
         let response;
 
-        if(method === 'POST'){
-            response = await addBusiness(formPayload)
+        if(method === 'POST'){            
+          response = await addBusiness(formPayload)
+          resetForm()
         }else{
-            response = await updateBusiness(formPayload)
+          response = await updateBusiness(formPayload)
         }
 
         if (response.status !== 200) {
             throw new Error("Network error")
         }
-        // await response.json()
+
+        if(method === 'PUT'){
+          const updateBusi = response.data.business
+          onUpdate?.(updateBusi)
+          onOpenChange(false)
+        }else{
+          const added = response.data.business
+          onUpdate?.(added)
+          onOpenChange(false)
+        }
         toast.success(business?._id ? 'Business data updated!' : 'Business successfully created!')
-        resetForm()
         } catch (error) {
             console.error('Error:', error)
             toast.error('Operation failed. Please try again.')
@@ -123,6 +138,12 @@ export function BusinessDialog({
             setIsLoading(false)
         }
     }
+
+    useEffect(() =>{
+      if(!open){
+        resetForm()
+      }
+    },[open])
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
