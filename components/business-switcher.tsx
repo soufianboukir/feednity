@@ -68,6 +68,8 @@ export function BusinessSwitcher({
       setActiveBusiness(newBusiss[0])
     }
   }
+
+  
   if (!businesses || businesses.length === 0) {
     return (
       <div>
