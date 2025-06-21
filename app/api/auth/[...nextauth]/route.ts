@@ -1,10 +1,9 @@
 
-import NextAuth, { Account, NextAuthOptions, Profile, Session, User as UserType } from "next-auth";
+import NextAuth, { Account, NextAuthOptions, Profile, } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import { dbConnection } from "@/config/db";
 import User from "@/models/user.model";
 import { type GoogleProfile } from "next-auth/providers/google";
-import { JWT } from "next-auth/jwt";
 import Credentials from "next-auth/providers/credentials";
 import bcrypt from "bcryptjs";
 
@@ -83,34 +82,53 @@ export const authOptions:NextAuthOptions  = {
             }
         return true;
         },
-        async jwt({ token, user , account}:{ token: JWT;user?: UserType; account?: Account | null}) {
-            if (user || account?.provider === "google") {
-                await dbConnection();
-                const email = user?.email || token.email;
-                const dbUser = await User.findOne({ email });
-                
-                if (dbUser) {
-                  token.id = dbUser._id.toString();
-                  token.name = dbUser.name;
-                  token.email = dbUser.email;
-                  token.image = dbUser.picture;
-                  token.plan = dbUser.plan;
-                  token.isVerified = dbUser.isVerified;
-                }
+        async jwt({ token, user, trigger }) {
+            if (user) {
+              token.id = user.id;
+              token.name = user.name;
+              token.email = user.email;
+              token.image = user.picture || user.image;
+              token.plan = user.plan;
+              token.isVerified = user.isVerified;
+            }
+        
+            if (trigger === "update") {
+              await dbConnection();
+              const dbUser = await User.findOne({ email: token.email });
+              if (dbUser) {
+                token.name = dbUser.name;
+                token.image = dbUser.picture;
+                token.plan = dbUser.plan;
+                token.isVerified = dbUser.isVerified;
               }
-              return token;
-        },
-        async session({ session, token }:{ session: Session;token: JWT;}) {
+            }
+        
+            if (token.email) {
+              await dbConnection();
+              const dbUser = await User.findOne({ email: token.email });
+              if (dbUser) {
+                token.id = dbUser._id.toString();
+                token.name = dbUser.name;
+                token.email = dbUser.email;
+                token.image = dbUser.picture;
+                token.plan = dbUser.plan;
+                token.isVerified = dbUser.isVerified;
+              }
+            }
+        
+            return token;
+          },
+          async session({ session, token }) {
             if (session.user) {
-                session.user.id = token.id as string;
-                session.user.name = token.name as string;
-                session.user.email = token.email as string;
-                session.user.image = token.image as string;
-                session.user.plan = token.plan as "free" | "pro";
-                session.user.isVerified = token.isVerified as boolean;
+              session.user.id = token.id as string;
+              session.user.name = token.name as string;
+              session.user.email = token.email as string;
+              session.user.image = token.image as string;
+              session.user.plan = token.plan as "free" | "pro";
+              session.user.isVerified = token.isVerified as boolean;
             }
             return session;
-        },
+          },
     },
     session: {
         strategy: "jwt",
