@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { getSession, signIn } from "next-auth/react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -16,6 +16,7 @@ import { Label } from "@/components/ui/label";
 import Link from "next/link";
 import GoogleContinue from "./google-continue";
 import { resendCode } from "@/services/auth";
+import { useSearchParams } from "next/navigation";
 
 
 export function LoginForm() {
@@ -26,6 +27,58 @@ export function LoginForm() {
     google: false,
     credentials: false,
   });
+
+  const searchParams = useSearchParams();
+
+  useEffect(() => {
+    const urlError = searchParams.get("error");
+    const emailParam = searchParams.get("email");
+    
+    if (urlError) {
+      switch (urlError) {
+        case "AccountExists":
+          setError(`An account with email ${emailParam} already exists. Please sign in with your password instead.`);
+          if (emailParam) {
+            setEmail(decodeURIComponent(emailParam));
+          }
+          break;
+        case "OAuthSignin":
+          setError("Error occurred during OAuth sign-in. Please try again.");
+          break;
+        case "OAuthCallback":
+          setError("Error occurred during OAuth callback. Please try again.");
+          break;
+        case "OAuthCreateAccount":
+          setError("Could not create OAuth account. Please try again.");
+          break;
+        case "EmailCreateAccount":
+          setError("Could not create account with email. Please try again.");
+          break;
+        case "Callback":
+          setError("Error occurred during callback. Please try again.");
+          break;
+        case "OAuthAccountNotLinked":
+          setError("Email already associated with another account. Please sign in with your original method.");
+          break;
+        case "EmailSignin":
+          setError("Error sending verification email. Please try again.");
+          break;
+        case "CredentialsSignin":
+          setError("Invalid email or password. Please check your credentials.");
+          break;
+        case "SessionRequired":
+          setError("You must be signed in to access this page.");
+          break;
+        default:
+          setError("An authentication error occurred. Please try again.");
+      }
+      
+      const url = new URL(window.location.href);
+      url.searchParams.delete("error");
+      url.searchParams.delete("email");
+      window.history.replaceState({}, "", url.toString());
+    }
+  }, [searchParams]);
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();

@@ -56,7 +56,7 @@ export const authOptions:NextAuthOptions  = {
         }: {
             account: Account | null;
             profile?: Profile | undefined;
-        }): Promise<boolean> {
+        }): Promise<boolean | string> {
             if (account?.provider === "google" && profile?.email) {
                 await dbConnection();
 
@@ -64,7 +64,13 @@ export const authOptions:NextAuthOptions  = {
 
                 const existingUser = await User.findOne({ email: googleProfile.email });
 
-                if (!existingUser) {
+                if (existingUser) {
+                    if (existingUser.password && existingUser.password !== "") {
+                        return `/login?error=AccountExists&email=${encodeURIComponent(googleProfile.email)}`;
+                    }
+                    
+                    return true;
+                } else {
                     await User.create({
                         name: googleProfile.name,
                         email: googleProfile.email,
@@ -75,19 +81,24 @@ export const authOptions:NextAuthOptions  = {
                     });
                 }
             }
-
         return true;
         },
-        async jwt({ token, user }:{ token: JWT;user?: UserType}) {
-            if (user) {
-                token.id = user.id;
-                token.name = user.name;
-                token.email = user.email;
-                token.image = user.picture || user.image; 
-                token.plan = user.plan;
-                token.isVerified = user.isVerified;
-            }
-            return token;
+        async jwt({ token, user , account}:{ token: JWT;user?: UserType; account?: Account | null}) {
+            if (user || account?.provider === "google") {
+                await dbConnection();
+                const email = user?.email || token.email;
+                const dbUser = await User.findOne({ email });
+                
+                if (dbUser) {
+                  token.id = dbUser._id.toString();
+                  token.name = dbUser.name;
+                  token.email = dbUser.email;
+                  token.image = dbUser.picture;
+                  token.plan = dbUser.plan;
+                  token.isVerified = dbUser.isVerified;
+                }
+              }
+              return token;
         },
         async session({ session, token }:{ session: Session;token: JWT;}) {
             if (session.user) {
