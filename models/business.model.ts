@@ -1,8 +1,10 @@
 import mongoose, { Schema, Document } from "mongoose";
+import { nanoid } from "nanoid"
 
 export interface IBusiness extends Document {
   owner: mongoose.Types.ObjectId;
   name: string;
+  feedbackSlug: string;
   description?: string;
   industry?: string;
   logo?: string;
@@ -23,6 +25,11 @@ const BusinessSchema = new Schema<IBusiness>(
             type: String,
             required: true,
             trim: true,
+        },
+        feedbackSlug: {
+            type: String,
+            unique: true,
+            default: () => nanoid(10)
         },
         description: {
             type: String,

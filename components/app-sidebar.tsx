@@ -2,17 +2,23 @@
 
 import * as React from "react"
 import {
-  BookOpen,
-  Bot,
-  Frame,
-  Map,
-  PieChart,
-  Settings2,
-  SquareTerminal,
+  BarChart,
+  Download,
+  FileText,
+  HelpCircle,
+  LayoutDashboard,
+  ListChecks,
+  Mail,
+  Megaphone,
+  MessageSquare,
+  QrCode,
+  Repeat,
+  Reply,
+  Rocket,
+  ShieldCheck,
+  Sliders,
 } from "lucide-react"
 
-import { NavMain } from "@/components/nav-main"
-import { NavProjects } from "@/components/nav-projects"
 import { NavUser } from "@/components/nav-user"
 import {
   Sidebar,
@@ -28,110 +34,92 @@ import { BusinessSwitcher } from "./business-switcher"
 import { getBusinesses } from "@/services/business"
 import { toast } from "sonner"
 import { Business } from "@/types"
+import { NavMain } from "./nav-main"
+import { NavHelp } from "./nav-help"
 
 const data = {
   navMain: [
     {
-      title: "Playground",
-      url: "#",
-      icon: SquareTerminal,
-      isActive: true,
-      items: [
-        {
-          title: "History",
-          url: "#",
-        },
-        {
-          title: "Starred",
-          url: "#",
-        },
-        {
-          title: "Settings",
-          url: "#",
-        },
-      ],
+      name: "Dashboard",
+      url: "/panel",
+      icon: LayoutDashboard,
     },
     {
-      title: "Models",
-      url: "#",
-      icon: Bot,
-      items: [
-        {
-          title: "Genesis",
-          url: "#",
-        },
-        {
-          title: "Explorer",
-          url: "#",
-        },
-        {
-          title: "Quantum",
-          url: "#",
-        },
-      ],
+      name: "Feedback",
+      url: "/feedback",
+      icon: MessageSquare,
     },
     {
-      title: "Documentation",
-      url: "#",
-      icon: BookOpen,
-      items: [
-        {
-          title: "Introduction",
-          url: "#",
-        },
-        {
-          title: "Get Started",
-          url: "#",
-        },
-        {
-          title: "Tutorials",
-          url: "#",
-        },
-        {
-          title: "Changelog",
-          url: "#",
-        },
-      ],
+      name: "Analytics / Insights",
+      url: "/analytics",
+      icon: BarChart,
+      proOnly: true
     },
     {
-      title: "Settings",
-      url: "#",
-      icon: Settings2,
-      items: [
-        {
-          title: "General",
-          url: "#",
-        },
-        {
-          title: "Team",
-          url: "#",
-        },
-        {
-          title: "Billing",
-          url: "#",
-        },
-        {
-          title: "Limits",
-          url: "#",
-        },
-      ],
+      name: "Export",
+      url: "/export",
+      icon: Download,
+      proOnly: true
+    },
+    {
+      name: "Qr code & links",
+      url: "/qr",
+      icon: QrCode,
+    },
+    {
+      name: "Customization",
+      url: "/customize",
+      icon: Sliders,
+    },
+    {
+      name: "Automations",
+      url: "/automations",
+      icon: Repeat,
+      proOnly: true
+    },
+    {
+      name: "Custom questions",
+      url: "/questions",
+      icon: ListChecks,
+      proOnly: true
+    },
+    {
+      name: "Responses",
+      url: "/responses",
+      icon: Reply,
+      proOnly: true
     },
   ],
-  projects: [
+  navHelp: [
     {
-      name: "Design Engineering",
-      url: "#",
-      icon: Frame,
+      name: "FAQs",
+      url: "/faqs",
+      icon: HelpCircle,
     },
     {
-      name: "Sales & Marketing",
-      url: "#",
-      icon: PieChart,
+      name: "Getting started",
+      url: "/start",
+      icon: Rocket,
     },
     {
-      name: "Travel",
-      url: "#",
-      icon: Map,
+      name: "Contact support",
+      url: "/contact",
+      icon: Mail,
+    },
+    {
+      name: "Feedback",
+      url: "/feedback-for-platform",
+      icon: Megaphone,
+    },
+    {
+      name: "Privacy Policy",
+      url: "/privacy-policy",
+      icon: ShieldCheck,
+    },
+    {
+      name: "Terms of service",
+      url: "/terms-of-service",
+      icon: FileText,
     },
   ],
 }
@@ -227,7 +215,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       </SidebarHeader>
       <SidebarContent>
         <NavMain items={data.navMain} />
-        <NavProjects projects={data.projects} />
+        <NavHelp items={data.navHelp} />
       </SidebarContent>
       <SidebarFooter>
         <NavUser user={user} />

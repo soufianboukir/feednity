@@ -23,6 +23,7 @@ import {
 import { BusinessDialog } from "./business-form"
 import { Business } from "@/types"
 import { DeleteBusiness } from "./delete-business"
+import { useActiveBusiness } from "@/stores/business-store"
 
 export function BusinessSwitcher({
   busis,
@@ -34,7 +35,7 @@ export function BusinessSwitcher({
 }) {
   const { isMobile } = useSidebar()
   const [businesses, setBusinesses] = React.useState<Business[]>(busis)
-  const [activeBusiness, setActiveBusiness] = React.useState<Business | undefined>(undefined)
+  const { activeBusiness, setActiveBusiness } = useActiveBusiness()
   const [isBusiOpen, setIsBusiOpen] = React.useState(false);
   const [isEditOpen, setIsEditOpen] = React.useState(false);
   const [isDeleteOpen, setIsDeleteOpen] = React.useState(false);
