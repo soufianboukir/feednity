@@ -50,7 +50,7 @@ const data = {
       icon: MessageSquare,
     },
     {
-      name: "Analytics / Insights",
+      name: "Analytics",
       url: "/analytics",
       icon: BarChart,
       proOnly: true
@@ -62,7 +62,7 @@ const data = {
       proOnly: true
     },
     {
-      name: "Qr code & links",
+      name: "Qrs",
       url: "/qr",
       icon: QrCode,
     },
@@ -78,7 +78,7 @@ const data = {
       proOnly: true
     },
     {
-      name: "Custom questions",
+      name: "Questions",
       url: "/questions",
       icon: ListChecks,
       proOnly: true
@@ -185,17 +185,17 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     return (
       <Sidebar collapsible="icon" {...props}>
         <SidebarHeader>
-          <div className="animate-pulse bg-gray-200 h-8 rounded"></div>
+          <div className="animate-pulse bg-gray-200 h-8 rounded dark:bg-gray-800"></div>
         </SidebarHeader>
         <SidebarContent>
           <div className="animate-pulse space-y-2 p-4">
-            <div className="bg-gray-200 h-6 rounded"></div>
-            <div className="bg-gray-200 h-6 rounded"></div>
-            <div className="bg-gray-200 h-6 rounded"></div>
+            <div className="bg-gray-200 dark:bg-gray-800 h-6 rounded"></div>
+            <div className="bg-gray-200 h-6 dark:bg-gray-800 rounded"></div>
+            <div className="bg-gray-200 h-6 rounded dark:bg-gray-800"></div>
           </div>
         </SidebarContent>
         <SidebarFooter>
-          <div className="animate-pulse bg-gray-200 h-8 rounded"></div>
+          <div className="animate-pulse bg-gray-200 h-8 rounded dark:bg-gray-800"></div>
         </SidebarFooter>
         <SidebarRail />
       </Sidebar>

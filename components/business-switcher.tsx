@@ -30,6 +30,7 @@ export function BusinessSwitcher({
 }: {
   busis: {
     name: string
+    feedbackSlug: string
     industry?: string
   }[]
 }) {

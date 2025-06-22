@@ -78,7 +78,6 @@ export const POST = async (req: Request) => {
       logoUrl = await uploadImage(`data:${logoFile.type};base64,${base64Image}`)
     }
 
-    const feedbackLink = `${name.toLowerCase().replace(/\s+/g, "-")}-${Date.now()}`
 
     const business = await Business.create({
       owner: session.user.id,
@@ -86,7 +85,6 @@ export const POST = async (req: Request) => {
       description: description || undefined,
       industry: industry || undefined,
       logo: logoUrl || undefined,
-      feedbackLink
     })
 
     return NextResponse.json({ business })

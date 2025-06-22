@@ -16,7 +16,7 @@ export default function Page() {
   const qrRef = useRef<HTMLDivElement>(null)
   const [copied, setCopied] = useState(false)
   
-  const feedbackLink = `https://yourdomain.com/feedback/${activeBusiness?._id || "demo"}`
+  const feedbackLink = `${process.env.NEXT_PUBLIC_APP_URL}/feedback/${activeBusiness?.feedbackSlug || "demo"}`
 
   const handleCopy = () => {
     navigator.clipboard.writeText(feedbackLink)

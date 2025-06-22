@@ -8,8 +8,6 @@ export interface IBusiness extends Document {
   description?: string;
   industry?: string;
   logo?: string;
-  feedbackLink: string;
-  qrCodeUrl?: string;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -29,6 +27,7 @@ const BusinessSchema = new Schema<IBusiness>(
         feedbackSlug: {
             type: String,
             unique: true,
+            required: true,
             default: () => nanoid(10)
         },
         description: {
@@ -41,15 +40,7 @@ const BusinessSchema = new Schema<IBusiness>(
         },
         logo: {
             type: String,
-        },
-        feedbackLink: {
-            type: String,
-            required: true,
-            unique: true,
-        },
-        qrCodeUrl: {
-            type: String,
-        },
+        }
     },
     {
         timestamps: true,
