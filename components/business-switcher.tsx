@@ -43,11 +43,11 @@ export function BusinessSwitcher({
   const [busi,setBusi] = React.useState<Business>()
 
   
-  React.useEffect(() => {
-    if (!activeBusiness && businesses.length > 0) {
-      setActiveBusiness(businesses[0])
-    }
-  }, [businesses, activeBusiness])
+    React.useEffect(() => {
+      if (!activeBusiness && businesses.length > 0) {
+        setActiveBusiness(businesses[0])
+      }
+    }, [businesses, activeBusiness])
 
   const handleBusinessUpdated = (updated: Business) => {
     setBusinesses(prev =>

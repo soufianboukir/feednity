@@ -1,13 +1,7 @@
 'use client'
 
-import { AppSidebar } from "@/components/app-sidebar"
 import { EmptyState } from "@/components/empty-state"
 import { SiteHeader } from "@/components/site-header"
-
-import {
-  SidebarInset,
-  SidebarProvider,
-} from "@/components/ui/sidebar"
 import { useActiveBusiness } from "@/stores/business-store"
 
 
@@ -15,16 +9,7 @@ export default function Page() {
   const { activeBusiness } = useActiveBusiness()
   
   return (
-    <SidebarProvider
-      style={
-        {
-          "--sidebar-width": "calc(var(--spacing) * 72)",
-          "--header-height": "calc(var(--spacing) * 12)",
-        } as React.CSSProperties
-      }
-    >
-      <AppSidebar variant="inset" />
-      <SidebarInset>
+    <div>
         <SiteHeader pageName="Dashboard"/>
         {
           !activeBusiness && (
@@ -47,8 +32,7 @@ export default function Page() {
             </div>
           </div>
         </div> */}
-      </SidebarInset>
-    </SidebarProvider>
+    </div>
   )
 }
 

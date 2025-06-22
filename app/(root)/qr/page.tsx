@@ -1,7 +1,6 @@
 "use client"
 
 import React, { useRef, useState } from "react"
-import { AppSidebar } from "@/components/app-sidebar"
 import { EmptyState } from "@/components/empty-state"
 import { SiteHeader } from "@/components/site-header"
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar"
@@ -63,7 +62,6 @@ export default function Page() {
           } as React.CSSProperties
         }
       >
-        <AppSidebar variant="inset" />
         <SidebarInset>
           <SiteHeader pageName="QrCode & link"/>
           <EmptyState />
@@ -73,16 +71,7 @@ export default function Page() {
   }
 
   return (
-    <SidebarProvider
-      style={
-        {
-          "--sidebar-width": "calc(var(--spacing) * 72)",
-          "--header-height": "calc(var(--spacing) * 12)",
-        } as React.CSSProperties
-      }
-    >
-      <AppSidebar variant="inset" />
-      <SidebarInset>
+    <div>
         <SiteHeader pageName="QrCode & link"/>
 
         <div className="max-w-md mx-auto mt-10 p-8 rounded-xl shadow-2xl text-center">
@@ -126,7 +115,6 @@ export default function Page() {
             </Button>
           </div>
         </div>
-      </SidebarInset>
-    </SidebarProvider>
+      </div>
   )
 }
