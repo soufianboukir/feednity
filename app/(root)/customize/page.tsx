@@ -2,29 +2,32 @@
 
 import { EmptyState } from "@/components/empty-state"
 import UnifiedFeedback from "@/components/feedback-1"
+import Loading from "@/components/loading"
 import { SiteHeader } from "@/components/site-header"
 import { Button } from "@/components/ui/button"
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar"
+import { useLoading } from "@/contexts/global-loading"
 import { updateBusinessForm } from "@/services/business"
-import { useActiveBusiness, useGlobalLoading } from "@/stores/business-store"
-import { useState } from "react"
+import { useActiveBusiness } from "@/stores/business-store"
+import { useEffect, useState } from "react"
 import { toast } from "sonner"
 
 
 export default function Page() {
   const { activeBusiness } = useActiveBusiness()
-  const [activeForm,setActiveForm] = useState(activeBusiness?.activeForm)
-  const [loading,setLoading] = useState(false);
-  const {loadingG,setLoadingG} = useGlobalLoading()
+  const [activeForm, setActiveForm] = useState<'select' | 'stars' | 'emojis' | undefined>(
+    activeBusiness?.activeForm
+  );
+  const [isLoading,setIsLoading] = useState(false);
+  const {loading} = useLoading()
 
-  console.log(activeBusiness);
-  
   const handleSave = async () =>{
     try{
-      setLoading(true)
+      setIsLoading(true)
       const response = await updateBusinessForm(activeBusiness?._id,activeForm);
       if(response.status === 200){
         toast.success('Saved successfully')
+        window.location.reload()
       }
     }catch(err: unknown){ 
       if (typeof err === "object" && err !== null && "response" in err) {
@@ -34,11 +37,15 @@ export default function Page() {
         toast.error("Network error. Please try again.");
       }
     }finally{
-      setLoading(false)
+      setIsLoading(false)
     }
   }
 
-  if(loadingG) return null
+  useEffect(() =>{
+    setActiveForm(activeBusiness?.activeForm)
+  },[activeBusiness])
+
+  if(loading) return <Loading />
 
   if (!activeBusiness) {
     return (
@@ -69,7 +76,7 @@ export default function Page() {
         <div className="flex justify-center mt-10">
           <Button className={`bg-green-600 cursor-pointer hover:bg-green-700 px-10 ${loading && 'bg-green-400'}`} onClick={handleSave}>
             {
-              loading ? "...Loading" : "Save changes"
+              isLoading ? "...Loading" : "Save changes"
             }
           </Button>
         </div>

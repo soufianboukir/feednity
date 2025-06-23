@@ -22,7 +22,7 @@ interface FeedbackProps {
   submit?: boolean
   businessName?: string
   businessLogo?: string
-  selectedForm: string
+  selectedForm?: string
   setSelectedForm: (selectedForm: "stars" | 'emojis' | 'select') => void
 }
 
@@ -54,20 +54,20 @@ export default function UnifiedFeedback({
       setSubmitted(true)
     }
 
-    const payload =
-      variant === "emojis"
-        ? {
-            rating: emojis[parseInt(rating) - 1]?.label || "",
-            name,
-            email,
-            comment,
-          }
-        : {
-            rating,
-            name,
-            email,
-            comment,
-          }
+    // const payload =
+    //   variant === "emojis"
+    //     ? {
+    //         rating: emojis[parseInt(rating) - 1]?.label || "",
+    //         name,
+    //         email,
+    //         comment,
+    //       }
+    //     : {
+    //         rating,
+    //         name,
+    //         email,
+    //         comment,
+    //       }
 
   }
 

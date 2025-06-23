@@ -36,7 +36,7 @@ import { toast } from "sonner"
 import { Business } from "@/types"
 import { NavMain } from "./nav-main"
 import { NavHelp } from "./nav-help"
-import { useGlobalLoading } from "@/stores/business-store"
+import { useLoading } from "@/contexts/global-loading"
 
 const data = {
   navMain: [
@@ -155,26 +155,38 @@ function createUserFromSession(session: Session | null): User {
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const { data: session, status } = useSession();
   const router = useRouter();
-  const {loading, setLoading} = useGlobalLoading()
+  const {loading, setLoading} = useLoading()
   const [businesses,setBusinesses] = React.useState<Business[]>([])
 
-  React.useEffect(() =>{
-    try{
-      setLoading(true)
-      const getBuiss = async () =>{
-        const response = await getBusinesses()
+  
+  React.useEffect(() => {
+    let mounted = true;
+    
+    const getBusinessesData = async () => {
+      try {
+        setLoading(true);
         
-        if(response.status === 200){
-          setBusinesses(response.data.businesses)
+        const response = await getBusinesses();
+        
+        if (mounted && response.status === 200) {
+          setBusinesses(response.data.businesses);
+        }
+      } catch {
+        toast.error('Failed to get businesses');
+      } finally {
+        if (mounted) {
+          console.log('Data fetch completed');
+          setLoading(false);
         }
       }
-      getBuiss()
-    }catch{
-      toast.error('Failed to get businesses')
-    }finally{
-      setLoading(false)
-    }
-  },[])
+    };
+
+    getBusinessesData();
+
+    return () => {
+      mounted = false;
+    };
+  }, [setLoading]);
 
   React.useEffect(() => {
     if (status === 'unauthenticated') {

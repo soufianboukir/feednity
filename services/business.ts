@@ -20,7 +20,7 @@ export const deleteBusiness = async (id: string) =>{
     return response
 }
 
-export const updateBusinessForm = async (id: string | undefined, activeForm: 'select' | 'stars' | 'emojis') =>{
+export const updateBusinessForm = async (id: string | undefined, activeForm: 'select' | 'stars' | 'emojis' | undefined) =>{
     const response = await api.patch(`/business/${id}/updateForm`,{activeForm});
     return response
 }

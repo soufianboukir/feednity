@@ -32,6 +32,7 @@ export function BusinessSwitcher({
     name: string
     feedbackSlug: string
     industry?: string
+    activeForm: 'select' | 'stars' | 'emojis'
   }[]
 }) {
   const { isMobile } = useSidebar()
@@ -42,12 +43,11 @@ export function BusinessSwitcher({
   const [isDeleteOpen, setIsDeleteOpen] = React.useState(false);
   const [busi,setBusi] = React.useState<Business>()
 
-  
-    React.useEffect(() => {
-      if (!activeBusiness && businesses.length > 0) {
-        setActiveBusiness(businesses[0])
-      }
-    }, [businesses, activeBusiness])
+  React.useEffect(() => {
+    if (!activeBusiness && businesses.length > 0) {
+      setActiveBusiness(businesses[0])
+    }
+  }, [businesses, activeBusiness])
 
   const handleBusinessUpdated = (updated: Business) => {
     setBusinesses(prev =>
@@ -71,7 +71,6 @@ export function BusinessSwitcher({
     }
   }
 
-  
   if (!businesses || businesses.length === 0) {
     return (
       <div>
