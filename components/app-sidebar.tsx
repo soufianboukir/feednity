@@ -36,6 +36,7 @@ import { toast } from "sonner"
 import { Business } from "@/types"
 import { NavMain } from "./nav-main"
 import { NavHelp } from "./nav-help"
+import { useGlobalLoading } from "@/stores/business-store"
 
 const data = {
   navMain: [
@@ -154,7 +155,7 @@ function createUserFromSession(session: Session | null): User {
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const { data: session, status } = useSession();
   const router = useRouter();
-  const [loading,setLoading] = React.useState<boolean>(false)
+  const {loading, setLoading} = useGlobalLoading()
   const [businesses,setBusinesses] = React.useState<Business[]>([])
 
   React.useEffect(() =>{

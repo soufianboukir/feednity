@@ -6,16 +6,19 @@ import { SiteHeader } from "@/components/site-header"
 import { Button } from "@/components/ui/button"
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar"
 import { updateBusinessForm } from "@/services/business"
-import { useActiveBusiness } from "@/stores/business-store"
+import { useActiveBusiness, useGlobalLoading } from "@/stores/business-store"
 import { useState } from "react"
 import { toast } from "sonner"
 
 
 export default function Page() {
   const { activeBusiness } = useActiveBusiness()
-  const [activeForm,setActiveForm] = useState(activeBusiness?.activeForm || 'select')
+  const [activeForm,setActiveForm] = useState(activeBusiness?.activeForm)
   const [loading,setLoading] = useState(false);
+  const {loadingG,setLoadingG} = useGlobalLoading()
 
+  console.log(activeBusiness);
+  
   const handleSave = async () =>{
     try{
       setLoading(true)
@@ -34,6 +37,8 @@ export default function Page() {
       setLoading(false)
     }
   }
+
+  if(loadingG) return null
 
   if (!activeBusiness) {
     return (
