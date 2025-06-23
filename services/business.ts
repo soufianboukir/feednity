@@ -19,3 +19,8 @@ export const deleteBusiness = async (id: string) =>{
     const response = await api.delete(`/business?id=${id}`)
     return response
 }
+
+export const updateBusinessForm = async (id: string | undefined, activeForm: 'select' | 'stars' | 'emojis') =>{
+    const response = await api.patch(`/business/${id}/updateForm`,{activeForm});
+    return response
+}

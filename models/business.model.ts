@@ -8,6 +8,7 @@ export interface IBusiness extends Document {
   description?: string;
   industry?: string;
   logo?: string;
+  activeForm: "select" | "stars" | "emojis"
   createdAt: Date;
   updatedAt: Date;
 }
@@ -40,6 +41,12 @@ const BusinessSchema = new Schema<IBusiness>(
         },
         logo: {
             type: String,
+        },
+        activeForm: {
+            type: String,
+            enum: ['select','stars','emojis'],
+            default: 'select',
+            required: true
         }
     },
     {
