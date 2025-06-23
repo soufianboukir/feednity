@@ -1,6 +1,7 @@
 import { dbConnection } from '@/config/db'
 import businessModel from '@/models/business.model'
 import feedbackModel from '@/models/feedback.model'
+import notificationModel from '@/models/notification.model'
 import { NextRequest, NextResponse } from 'next/server'
 
 export async function POST(
@@ -26,6 +27,12 @@ export async function POST(
             comment,
             name,
             email,
+        })        
+
+        await notificationModel.create({
+            recipient: business.owner.toString(),
+            type: "feedback_received",
+            message: `A customer submitted feedback for your business ${business.name} — view it in your dashboard.`
         })
 
         return NextResponse.json({ message: 'Feedback submitted successfully', feedback })

@@ -1,7 +1,7 @@
 import { Separator } from "@/components/ui/separator"
 import { SidebarTrigger } from "@/components/ui/sidebar"
 import { ModeToggle } from "./theme-provider"
-import { Bell } from "lucide-react"
+import Notifications from "./notifications"
 
 export function SiteHeader({ pageName }: {pageName: string}) {
   return (
@@ -14,7 +14,7 @@ export function SiteHeader({ pageName }: {pageName: string}) {
         />
         <h1 className="text-base font-medium">{pageName}</h1>
         <div className="ml-auto flex items-center gap-5">
-            <Bell className="cursor-pointer w-6 h-6" />
+            <Notifications />
             <ModeToggle />
         </div>
       </div>

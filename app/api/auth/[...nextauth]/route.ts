@@ -6,6 +6,7 @@ import User from "@/models/user.model";
 import { type GoogleProfile } from "next-auth/providers/google";
 import Credentials from "next-auth/providers/credentials";
 import bcrypt from "bcryptjs";
+import notificationModel from "@/models/notification.model";
 
 export const authOptions:NextAuthOptions  = {
     providers: [
@@ -70,7 +71,7 @@ export const authOptions:NextAuthOptions  = {
                     
                     return true;
                 } else {
-                    await User.create({
+                    const newUser = await User.create({
                         name: googleProfile.name,
                         email: googleProfile.email,
                         picture: googleProfile.picture,
@@ -78,6 +79,12 @@ export const authOptions:NextAuthOptions  = {
                         plan: "free",
                         password: "",
                     });
+
+                    await notificationModel.create({
+                        recipient: newUser._id,
+                        type: "system",
+                        message: `🎉 Welcome aboard, ${newUser.name}! We're excited to have you with us.`
+                    })
                 }
             }
         return true;

@@ -4,6 +4,7 @@ import bcrypt from "bcryptjs";
 import { NextResponse } from "next/server";
 import { sendVerificationEmail } from "@/lib/mail";
 import { saveVerificationCode } from "@/lib/verification-code";
+import notificationModel from "@/models/notification.model";
 
 export async function POST(request: Request) {
   try {
@@ -20,7 +21,7 @@ export async function POST(request: Request) {
 
     const hashedPassword = await bcrypt.hash(password, 12);
 
-    await User.create({
+    const newUser = await User.create({
         name,
         email,
         password: hashedPassword,
@@ -30,6 +31,11 @@ export async function POST(request: Request) {
     const code = await saveVerificationCode(email);
 
     await sendVerificationEmail(email, code);
+    await notificationModel.create({
+        recipient: newUser._id,
+        type: "system",
+        message: `🎉 Welcome aboard, ${newUser.name}! We're excited to have you with us.`
+    })
 
     return NextResponse.json({
       message:
