@@ -2,10 +2,11 @@ import mongoose, { Schema, Document } from "mongoose"
 
 export interface Feedback extends Document {
     business: mongoose.Types.ObjectId
-    rating: number
+    rating: string
     comment?: string
+    name: string
+    email: string
     createdAt: Date
-    deviceInfo?: string
 }
 
 const FeedbackSchema = new Schema<Feedback>(
@@ -16,7 +17,7 @@ const FeedbackSchema = new Schema<Feedback>(
             required: true,
         },
         rating: {
-            type: Number,
+            type: String,
             required: true,
             min: 1,
             max: 5,
@@ -25,9 +26,12 @@ const FeedbackSchema = new Schema<Feedback>(
             type: String,
             trim: true,
         },
-        deviceInfo: {
-            type: String,
+        name: {
+            type: String
         },
+        email: {
+            type: String
+        }
     },
     {
         timestamps: { createdAt: true, updatedAt: false },

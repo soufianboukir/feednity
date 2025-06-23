@@ -24,3 +24,8 @@ export const updateBusinessForm = async (id: string | undefined, activeForm: 'se
     const response = await api.patch(`/business/${id}/updateForm`,{activeForm});
     return response
 }
+
+export const getBusinessesData = async (slug: string) =>{
+    const response = await api.get(`/business/businessByFeedbackSlug/${slug}`)
+    return response
+}

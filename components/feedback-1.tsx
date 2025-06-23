@@ -8,6 +8,7 @@ import { Textarea } from "./ui/textarea"
 import { Input } from "./ui/input"
 import { Button } from "./ui/button"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./ui/select"
+import { FeedbackForm, submitFeedback } from "@/services/feedback"
 
 const emojis = [
   { icon: "😠", label: "Very Bad" },
@@ -23,7 +24,8 @@ interface FeedbackProps {
   businessName?: string
   businessLogo?: string
   selectedForm?: string
-  setSelectedForm: (selectedForm: "stars" | 'emojis' | 'select') => void
+  setSelectedForm?: (selectedForm: "stars" | 'emojis' | 'select') => void
+  feedbackSlug?: string
 }
 
 export default function UnifiedFeedback({
@@ -32,7 +34,8 @@ export default function UnifiedFeedback({
   businessName,
   businessLogo,
   selectedForm,
-  setSelectedForm
+  setSelectedForm,
+  feedbackSlug
 }: FeedbackProps) {
   const [rating, setRating] = useState<string>('0')
   const [hovered, setHovered] = useState<number>(0)
@@ -40,6 +43,7 @@ export default function UnifiedFeedback({
   const [email, setEmail] = useState("")
   const [comment, setComment] = useState("")
   const [submitted, setSubmitted] = useState(false)
+  const [loading,setLoading] = useState(false)
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -54,21 +58,31 @@ export default function UnifiedFeedback({
       setSubmitted(true)
     }
 
-    // const payload =
-    //   variant === "emojis"
-    //     ? {
-    //         rating: emojis[parseInt(rating) - 1]?.label || "",
-    //         name,
-    //         email,
-    //         comment,
-    //       }
-    //     : {
-    //         rating,
-    //         name,
-    //         email,
-    //         comment,
-    //       }
-
+    const payload:FeedbackForm =
+      variant === "emojis"
+        ? {
+            rating: emojis[parseInt(rating) - 1]?.label || "",
+            name,
+            email,
+            comment,
+          }
+        : {
+            rating,
+            name,
+            email,
+            comment,
+          }
+    try{
+      setLoading(true)
+      const response = await submitFeedback(payload,feedbackSlug!)
+      if(response.status === 200){
+        setSubmitted(true)
+      }
+    }catch{
+      toast.error('An error occured pleaese try again')
+    }finally{
+      setLoading(false)
+    }
   }
 
   if (submitted) {
@@ -82,7 +96,7 @@ export default function UnifiedFeedback({
   }
 
   return (
-    <div className={`mt-10 p-6 border rounded-xl shadow text-center ${selectedForm === variant ? "border-blue-400 border-2 shadow-lg" : "border-gray-300"}`}>
+    <div className={`mt-10 ${submit && 'lg:w-[40%] w-[80%] mx-auto'} p-6 border rounded-xl shadow text-center ${selectedForm === variant ? "border-blue-400 border-2 shadow-lg" : "border-gray-300"}`}>
       {businessLogo && (
         <div className="flex justify-center mb-2">
           <Image src={businessLogo} alt="business logo" width={100} height={100} />
@@ -160,21 +174,29 @@ export default function UnifiedFeedback({
           onChange={(e) => setComment(e.target.value)}
         />
 
-        <Button className="mt-6 w-full py-3 bg-blue-600 text-white rounded-md hover:bg-blue-500 transition">
-          Submit Feedback
+        <Button className="mt-6 w-full py-3 bg-blue-600 text-white rounded-md hover:bg-blue-500 transition" disabled={loading}>
+          {
+            loading ? 
+              '...Loading'
+            : 'Submit feedback'
+          }
         </Button>
 
-        <div className="mt-4 flex justify-center items-center">
-          <input
-            type="radio"
-            name="feedback-form"
-            value={variant}
-            checked={selectedForm === variant}
-            onChange={(e) => setSelectedForm(e.target.value as 'select' | 'stars' | 'emojis')}
-            className="cursor-pointer"
-          />
-          <label className="ml-2 text-sm capitalize">{variant}</label>
-        </div>
+        {
+          !submit && (
+            <div className="mt-4 flex justify-center items-center">
+              <input
+                type="radio"
+                name="feedback-form"
+                value={variant}
+                checked={selectedForm === variant}
+                onChange={(e) => setSelectedForm?.(e.target.value as 'select' | 'stars' | 'emojis')}
+                className="cursor-pointer"
+              />
+              <label className="ml-2 text-sm capitalize">{variant}</label>
+          </div>
+          )
+        }
       </form>
     </div>
   )
