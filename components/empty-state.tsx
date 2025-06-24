@@ -3,7 +3,8 @@
 import { Building2 } from "lucide-react"
 
 
-export function EmptyState() {
+export function EmptyState({title= 'No businesses yet', detail= 'Create your first business to start collecting customer feedback through QR codes & links.'}
+  :{title ?: string, detail?: string} ) {
   return (
     <div 
       className="flex flex-col items-center mt-20 justify-center text-center p-8 gap-6 transition-colors cursor-pointer"
@@ -13,10 +14,10 @@ export function EmptyState() {
       </div>
       <div className="space-y-2 max-w-md">
         <h2 className="text-xl font-semibold text-gray-900 dark:text-gray-100">
-          No businesses yet
+          {title}
         </h2>
         <p className="text-muted-foreground text-sm">
-          Create your first business to start collecting customer feedback through QR codes & links.
+          {detail}
         </p>
       </div>
     </div>
