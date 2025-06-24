@@ -9,3 +9,14 @@ export interface Business {
     createdAt?: Date;
     updatedAt?: Date;
 }
+
+export type Feedback = {
+    _id: string
+    business: string
+    name: string
+    email: string
+    rating: string
+    comment?: string
+    createdAt: string
+}
+  

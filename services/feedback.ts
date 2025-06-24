@@ -11,3 +11,8 @@ export const submitFeedback = async (formData: FeedbackForm,businessFeedbackSlug
     const response = await api.post(`/feedback/submit/${businessFeedbackSlug}`,formData);
     return response
 }
+
+export const feedbackPageData = async (query: string) =>{
+    const response = await api.get(`/feedback?${query}`);
+    return response
+}
