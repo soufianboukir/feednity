@@ -11,8 +11,8 @@ import notificationModel from "@/models/notification.model";
 export const authOptions:NextAuthOptions  = {
     providers: [
         GoogleProvider({
-            clientId: process.env.GOOGLE_CLIENT_ID!,
-            clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+            clientId: process.env.GOOGLE_CLIENT_ID,
+            clientSecret: process.env.GOOGLE_CLIENT_SECRET,
         }),
         Credentials({
             name: "Credentials",
@@ -98,22 +98,18 @@ export const authOptions:NextAuthOptions  = {
               token.plan = user.plan;
               token.isVerified = user.isVerified;
             }
-        
-            if (trigger === "update") {
+          
+            if (trigger === "update" || token.email) {
               await dbConnection();
               const dbUser = await User.findOne({ email: token.email });
+          
               if (dbUser) {
-                token.name = dbUser.name;
-                token.image = dbUser.picture;
-                token.plan = dbUser.plan;
-                token.isVerified = dbUser.isVerified;
-              }
-            }
-        
-            if (token.email) {
-              await dbConnection();
-              const dbUser = await User.findOne({ email: token.email });
-              if (dbUser) {
+                if (dbUser.plan === 'pro' && dbUser.planExpiresAt && new Date() > dbUser.planExpiresAt) {
+                  dbUser.plan = 'free';
+                  dbUser.planExpiresAt = undefined;
+                  await dbUser.save();
+                }
+          
                 token.id = dbUser._id.toString();
                 token.name = dbUser.name;
                 token.email = dbUser.email;
@@ -122,9 +118,9 @@ export const authOptions:NextAuthOptions  = {
                 token.isVerified = dbUser.isVerified;
               }
             }
-        
+          
             return token;
-          },
+          },          
           async session({ session, token }) {
             if (session.user) {
               session.user.id = token.id as string;

@@ -2,6 +2,7 @@ import { getServerSession } from 'next-auth';
 import { NextResponse } from 'next/server';
 import { authOptions } from '../auth/[...nextauth]/route';
 import User from '@/models/user.model';
+import mongoose from 'mongoose';
 interface PaymentData {
   name: string;
   email: string;
@@ -53,7 +54,7 @@ export async function POST(request: Request) {
         })
       }
 
-      const user = await User.findOne({_id: session.user.id})
+      const user = await User.findById(new mongoose.Types.ObjectId(session.user.id));
       if(!user){
         return NextResponse.json({
           message: 'User not found',
@@ -78,6 +79,7 @@ export async function POST(request: Request) {
       }
 
       user.plan = 'pro';
+      user.planExpiresAt = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000);
       await user.save()
 
       return NextResponse.json(

@@ -7,6 +7,7 @@ export interface IUser extends Document {
     picture: string;
     isVerified: boolean;
     plan: 'free' | 'pro';
+    planExpiresAt?: Date;
     createdAt: Date;
     updatedAt: Date;
 }
@@ -38,7 +39,8 @@ const UserSchema: Schema = new Schema<IUser>(
             type: String,
             required: true,
             default: 'free'
-        }
+        },
+        planExpiresAt: { type: Date },
     },
     {
         timestamps: true,

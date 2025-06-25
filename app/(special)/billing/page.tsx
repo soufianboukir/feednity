@@ -6,7 +6,8 @@ export default function Home() {
   const [total, setTotal] = useState(0);
   const [isProcessing, setIsProcessing] = useState(false);
   const [paypalError, setPaypalError] = useState("");
-  // Calculate subtotal and total
+  const [success, setSuccess] = useState('');
+
   useEffect(() => {
     setTotal(1.00);
   }, []);
@@ -27,7 +28,6 @@ export default function Home() {
     setIsProcessing(true);
     try {
       const order = await actions.order.get();
-      console.log('Payment successful', order);
       
       const payerName = order.payer?.name?.given_name || '';
       const payerEmail = order.payer?.email_address || '';
@@ -39,8 +39,6 @@ export default function Home() {
         orderID: data.orderID
       };
       
-      console.log('Sending to API:', paymentData);
-      
       const response = await fetch('/api/payment', {
         method: 'POST',
         headers: {
@@ -49,22 +47,17 @@ export default function Home() {
         body: JSON.stringify(paymentData),
       });
       if (!response.ok) {
-        const errorText = await response.text();
-        console.error('API error response:', errorText);
         throw new Error('Payment processing failed');
       }
-      const result = await response.json();
-      console.log('API response:', result);
-      alert('Payment processed successfully!');
-    } catch (error) {
-      console.error('Payment failed:', error);
+      setSuccess('Payment processed successfully!')
+    } catch {
       setPaypalError('Payment failed. Please try again.');
     } finally {
       setIsProcessing(false);
     }
   };
-  const onError = (err: any) => {
-    console.error('PayPal error:', err);
+
+  const onError = () => {
     setPaypalError('An error occurred with PayPal. Please try again.');
   };
   return (
@@ -78,10 +71,15 @@ export default function Home() {
                 <span>Processing your payment...</span>
             </div>
             )}
-            {paypalError && (
-            <div className="mb-4 p-3 bg-red-100 text-red-700 rounded text-sm">
-                {paypalError}
-            </div>
+            {success && (
+              <div className="mb-4 p-3 bg-green-100 text-green-700 rounded text-sm">
+                  {success}
+              </div>
+            )}
+            {paypalError && !success && (
+              <div className="mb-4 p-3 bg-red-100 text-red-700 rounded text-sm">
+                  {paypalError}
+              </div>
             )}
             <PayPalScriptProvider options={{
                 clientId: process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID || '',
