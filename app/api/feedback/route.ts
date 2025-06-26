@@ -2,7 +2,8 @@ import { NextRequest, NextResponse } from 'next/server'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/app/api/auth/[...nextauth]/route'
 import { dbConnection } from '@/config/db'
-import feedbackModel from '@/models/feedback.model'
+import feedbackModel, { Feedback } from '@/models/feedback.model'
+import { FilterQuery } from 'mongoose'
 
 export async function GET(req: NextRequest) {
     await dbConnection()
@@ -26,7 +27,7 @@ export async function GET(req: NextRequest) {
         return NextResponse.json({ error: 'businessId is required' }, { status: 400 })
     }
 
-    const filters: any = { business: businessId }
+    const filters: FilterQuery<Feedback> = { business: businessId }
 
     if (rating) {
         filters.rating = rating
@@ -53,8 +54,7 @@ export async function GET(req: NextRequest) {
             page,
             totalPages: Math.ceil(total / limit),
         })
-    } catch (error) {
-        console.error('[GET_FEEDBACK_ERROR]', error)
+    } catch {
         return NextResponse.json({ error: 'Server error' }, { status: 500 })
     }
 }

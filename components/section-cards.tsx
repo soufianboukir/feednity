@@ -13,7 +13,7 @@ import { Feedback } from "@/types";
 
 type SectionCardProps = {
   avgRating: number;
-  lastFeedback: Feedback;
+  lastFeedback: Feedback | null;
   totalFeedbacks: number;
   totalFeedbacksLastweek: number
 }
@@ -47,7 +47,7 @@ export function SectionCards({avgRating, lastFeedback, totalFeedbacks, totalFeed
         <CardHeader>
           <CardDescription>Most Recent Feedback</CardDescription>
           <CardTitle className="text-2xl font-semibold tabular-nums @[250px]/card:text-3xl truncate">
-            {lastFeedback.rating} by <span className="max-w-lg text">{lastFeedback.name || 'unknown'}</span>
+            {lastFeedback?.rating} by <span className="max-w-lg text">{lastFeedback?.name || 'unknown'}</span>
           </CardTitle>
           <CardAction>
             <Badge variant="outline">

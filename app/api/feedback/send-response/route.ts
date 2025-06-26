@@ -4,8 +4,6 @@ import nodemailer from "nodemailer"
 export const POST = async (req: NextRequest) => {
   try {
     const { to, subject, text, from } = await req.json()
-
-    console.log(to);
     
     if (!to || !text || !from) {
       return NextResponse.json({ error: "Missing fields" }, { status: 400 })

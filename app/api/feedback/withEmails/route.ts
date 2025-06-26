@@ -1,5 +1,6 @@
 import { dbConnection } from '@/config/db'
-import feedbackModel from '@/models/feedback.model'
+import feedbackModel, { Feedback } from '@/models/feedback.model'
+import { FilterQuery } from 'mongoose'
 import { NextRequest, NextResponse } from 'next/server'
 
 export const GET = async (req: NextRequest) => {
@@ -14,7 +15,7 @@ export const GET = async (req: NextRequest) => {
         const limit = 10
         const skip = (page - 1) * limit
 
-        const query: any = {
+        const query: FilterQuery<Feedback> = {
             email: { $exists: true, $ne: '' },
         }
 
