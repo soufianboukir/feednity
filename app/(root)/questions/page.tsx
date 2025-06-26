@@ -50,6 +50,7 @@ export default function Questions() {
     if(status === 'loading') return <Loading message='Loading your feedbacks...'/>
     if(session?.user.plan === 'free') return router.push('/upgrade-to-pro')
 
+        
   return (
     <div>
         <SiteHeader pageName='Customize Feedback Questions'/>
