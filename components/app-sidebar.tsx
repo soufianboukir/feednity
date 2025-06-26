@@ -175,7 +175,6 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         toast.error('Failed to get businesses');
       } finally {
         if (mounted) {
-          console.log('Data fetch completed');
           setLoading(false);
         }
       }

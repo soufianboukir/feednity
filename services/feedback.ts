@@ -9,10 +9,15 @@ export type FeedbackForm = {
 
 export const submitFeedback = async (formData: FeedbackForm,businessFeedbackSlug: string) =>{
     const response = await api.post(`/feedback/submit/${businessFeedbackSlug}`,formData);
-    return response
+    return response;
 }
 
 export const feedbackPageData = async (query: string) =>{
     const response = await api.get(`/feedback?${query}`);
-    return response
+    return response;
+}
+
+export const feedbacksWithMails = async (query: string) =>{
+    const response = await api.get(`/feedback/withEmails?${query}`);
+    return response;
 }
