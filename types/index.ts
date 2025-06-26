@@ -1,8 +1,8 @@
 export interface Business {
     _id?:string;
     name: string;
-    activeForm: "select" | "stars" | "emojis";
-    feedbackSlug: string;
+    activeForm?: "select" | "stars" | "emojis";
+    feedbackSlug?: string;
     description?: string;
     industry?: string;
     logo?: string;

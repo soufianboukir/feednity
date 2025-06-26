@@ -7,3 +7,11 @@ export interface Notification {
     isRead: boolean
     createdAt: Date
 }
+
+export interface Question {
+    label: string;
+    type: "text" | "multiple-choice";
+    required: boolean;
+    order: number;
+    options?: string[];
+}

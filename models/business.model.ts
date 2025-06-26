@@ -1,3 +1,4 @@
+import { Question } from "@/interface";
 import mongoose, { Schema, Document } from "mongoose";
 import { nanoid } from "nanoid"
 
@@ -8,10 +9,12 @@ export interface IBusiness extends Document {
   description?: string;
   industry?: string;
   logo?: string;
-  activeForm: "select" | "stars" | "emojis"
+  activeForm: "select" | "stars" | "emojis";
+  questions?: Question[];
   createdAt: Date;
   updatedAt: Date;
 }
+  
 
 const BusinessSchema = new Schema<IBusiness>(
     {
@@ -47,7 +50,8 @@ const BusinessSchema = new Schema<IBusiness>(
             enum: ['select','stars','emojis'],
             default: 'select',
             required: true
-        }
+        },
+        questions: []
     },
     {
         timestamps: true,

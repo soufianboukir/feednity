@@ -28,7 +28,7 @@ import { SendResponse } from '@/components/send-response'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 
-export default function FeedbackPage() {
+export default function Responses() {
     const [feedbacks, setFeedbacks] = useState<Feedback[]>([])
     const [page, setPage] = useState(1)
     const [totalPages, setTotalPages] = useState(1)
