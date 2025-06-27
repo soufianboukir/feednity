@@ -23,7 +23,7 @@ export default function Questions() {
     const [openAdd,setOpenAdd] = useState<boolean>(false)
     const [openDelete,setOpenDelete] = useState<boolean>(false)
     const [openUpdate,setOpenUpdate] = useState<boolean>(false)
-    const [updateQuestion,setUpdateQuestion] = useState<Question>()
+    const [questionToUpdate,setQuestionToUpdate] = useState<Question>()
     const [indexToDelete,setIndexToDelete] = useState<number>();
     const [questions,setQuestions] = useState<Question[] | []>([])
     const [loading,setLoading] = useState(false)
@@ -54,7 +54,7 @@ export default function Questions() {
         setQuestions(newQuestions);
     }
 
-    const onAdded = (newQuestions: Question[]) =>{
+    const on_Update_Added= (newQuestions: Question[]) =>{
         setQuestions(newQuestions);
     }
 
@@ -77,7 +77,16 @@ export default function Questions() {
                         <div className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-blue-500 to-purple-600 dark:from-blue-600 dark:to-purple-700"></div>
                         
                         <div className="absolute bottom-4 right-4 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-                            <QuestionsForm open={openUpdate} question={q} onOpenChange={setOpenUpdate} questions={questions} businessId={activeBusiness?._id} onAdded={onAdded} update={true}/>
+                            <Button
+                            className="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 font-medium text-sm px-3 py-1 rounded-lg border border-blue-200 dark:border-blue-800 bg-blue-50/50 dark:bg-blue-900/20 hover:bg-blue-100 dark:hover:bg-blue-900/40 transition-all shadow-xs hover:shadow-sm flex items-center gap-1"
+                            aria-label={`Update question`}
+                            onClick={() => {
+                                setQuestionToUpdate(q)
+                                setOpenUpdate(true)
+                            }}
+                            >
+                            <SquarePen className='w-4 h-4' />
+                            </Button>
                             <Button
                                 className="text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-300 font-medium text-sm px-3 py-1 rounded-lg border border-red-200 dark:border-red-800 bg-red-50/50 dark:bg-red-900/20 hover:bg-red-100 dark:hover:bg-red-900/40 transition-all shadow-xs hover:shadow-sm flex items-center gap-1"
                                 aria-label={`Delete question ${q.label}`}
@@ -142,7 +151,7 @@ export default function Questions() {
                 <div className="border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-2xl p-6 bg-white/50 dark:bg-muted/40 h-[200px] hover:bg-white transition-all duration-300 ease-in-out flex items-center justify-center cursor-pointer">
                     <div className="text-center">
                         <div className="mx-auto w-12 h-12 rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center text-gray-500 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 mb-3 transition-colors">
-                            <QuestionsForm open={openAdd} onOpenChange={setOpenAdd} questions={questions} businessId={activeBusiness?._id} onAdded={onAdded}/>
+                            <QuestionsForm open={openAdd} onOpenChange={setOpenAdd} questions={questions} businessId={activeBusiness?._id} onUpdateAdded={on_Update_Added} update={false}/>
                         </div>
                         <p className="font-medium text-gray-700 dark:text-gray-300">Add New Question</p>
                     </div>
@@ -152,6 +161,18 @@ export default function Questions() {
         {
             openDelete && <DeleteQuestion business={activeBusiness} open={openDelete} onOpenChange={setOpenDelete} index={indexToDelete} onDeleted={onDeleted}/>
         }
+        <QuestionsForm
+            open={openUpdate}
+            question={questionToUpdate}
+            onOpenChange={(open) => {
+                setOpenUpdate(open)
+                if (!open) setQuestionToUpdate(undefined)
+            }}
+            questions={questions}
+            businessId={activeBusiness?._id}
+            onUpdateAdded={on_Update_Added}
+            update={true}
+            />
     </div>
   )
 }

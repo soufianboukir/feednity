@@ -11,8 +11,8 @@ export const addQuestion = async (questions: Question[], businessId: string) =>{
     return response;
 }
 
-export const updateQuestion = async (businessId: string) =>{
-    const response = await api.put(`/feedback/${businessId}/questions`);
+export const updateQuestion = async (questions: Question[],businessId: string) =>{
+    const response = await api.put(`/feedback/${businessId}/questions`,{questions});
     return response;
 }
 

@@ -16,9 +16,9 @@ import {
 } from "@/components/ui/dialog"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { toast } from 'sonner'
-import { Plus, SquarePen } from 'lucide-react'
+import { Plus } from 'lucide-react'
 import { Question } from '@/interface'
-import { addQuestion } from '@/services/questions'
+import { addQuestion, updateQuestion } from '@/services/questions'
 
 
 interface QuestionsFormProps {
@@ -26,8 +26,7 @@ interface QuestionsFormProps {
   onOpenChange: (open: boolean) => void
   businessId: string | undefined
   questions: Question[]
-  onUpdate: (newQuestions: Question[]) => void
-  onAdded: (newQuestions: Question[]) => void 
+  onUpdateAdded: (newQuestions: Question[]) => void
   question?: Question
   update:boolean
 }
@@ -37,8 +36,7 @@ export function QuestionsForm({
   onOpenChange,
   businessId,
   questions: initialQuestions,
-  onUpdate,
-  onAdded,
+  onUpdateAdded,
   question,
   update
 }: QuestionsFormProps) {
@@ -51,14 +49,7 @@ export function QuestionsForm({
         order: question?.order || questions.length + 1,
         options: question?.options || [],
     })
-
-    useEffect(() => {
-        if (open) {
-        setQuestions([...initialQuestions].sort((a, b) => a.order - b.order))
-        setEditingIndex(null)
-        resetForm()
-        }
-    }, [open, initialQuestions])
+    
 
     const resetForm = () => {
         setForm({ label: '', type: 'text', required: false, order: questions.length + 1, options: [] })
@@ -103,17 +94,14 @@ export function QuestionsForm({
     }
 
     const handleSubmit = async () => {
-        // basic validation
         if (!form.label.trim()) return toast.error('Label is required')
         if (form.type === 'multiple-choice' && (!form.options || form.options.length < 2)) return toast.error('At least two options required')
 
         let updated: Question[]
         if (editingIndex !== null) {
-        // update existing
-        updated = questions.map((q, i) => (i === editingIndex ? { ...form } : q))
+          updated = questions.map((q, i) => (i === editingIndex ? { ...form } : q))
         } else {
-        // add new
-        updated = [...questions, form]
+          updated = [...questions, form]
         }
 
         // re-sort by order
@@ -121,33 +109,48 @@ export function QuestionsForm({
         .map((q, idx) => ({ ...q, order: q.order || idx + 1 }))
         .sort((a, b) => a.order - b.order)
 
-        const response = await addQuestion(updated,businessId!)
-        if(response.status === 200){
+        if(!update){
+          const response = await addQuestion(updated,businessId!)
+          if(response.status === 200){
             toast.success("New question added successfully")
-            onAdded(updated)
+            onUpdateAdded(updated)
+          }
         }
-        
-        setQuestions(updated)
-        onUpdate(updated)         // send up
-        toast.success(editingIndex !== null ? 'Question updated' : 'Question added')
-        // reset to add mode
-        setEditingIndex(null)
-        resetForm()
+        if(update){
+          const response = await updateQuestion(updated,businessId!)
+          if(response.status === 200){
+            toast.success('Data updated successfully!')
+            onUpdateAdded(updated)
+          }
+        }
     }
+
+    const initializeForm = () => {
+      if (question) {
+        setForm({
+          label: question.label,
+          type: question.type,
+          required: question.required,
+          order: question.order,
+          options: question.options,
+        })
+      } else {
+        resetForm()
+      }
+    }
+    
+    useEffect(() => {
+      if (open) {
+        setQuestions([...initialQuestions].sort((a, b) => a.order - b.order))
+        initializeForm()
+      }
+    }, [open, initialQuestions, question])
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogTrigger asChild>
         {
-          update ? 
-          <Button
-              className="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 font-medium text-sm px-3 py-1 rounded-lg border border-blue-200 dark:border-blue-800 bg-blue-50/50 dark:bg-blue-900/20 hover:bg-blue-100 dark:hover:bg-blue-900/40 transition-all shadow-xs hover:shadow-sm flex items-center gap-1"
-              aria-label={`Update question`}
-          >
-              <SquarePen className='w-4 h-4'/>
-          </Button>
-          :
-          <Plus className='w-8 h-8'/>
+          !update && <Plus className='w-8 h-8'/>
         }
       </DialogTrigger>
       <DialogContent className="sm:max-w-[600px]">
