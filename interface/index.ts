@@ -15,3 +15,8 @@ export interface Question {
     order: number;
     options?: string[];
 }
+
+export interface Response {
+    label: string;
+    response: string | string[];
+}

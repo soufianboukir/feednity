@@ -11,6 +11,7 @@ export interface IBusiness extends Document {
   logo?: string;
   activeForm: "select" | "stars" | "emojis";
   questions?: Question[];
+  responses?: Response[];
   createdAt: Date;
   updatedAt: Date;
 }
@@ -51,7 +52,8 @@ const BusinessSchema = new Schema<IBusiness>(
             default: 'select',
             required: true
         },
-        questions: []
+        questions: [],
+        responses: [],
     },
     {
         timestamps: true,

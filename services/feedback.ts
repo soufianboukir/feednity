@@ -1,11 +1,16 @@
 import { api } from "@/config/api"
 
-export type FeedbackForm = {
-    name?: string;
-    email?: string;
-    comment: string;
-    rating: string;
+export interface FeedbackForm {
+    rating: string
+    name: string
+    email: string
+    comment: string
+    questions?: {
+      label: string
+      response: string | string[]
+    }[]
 }
+  
 
 export const submitFeedback = async (formData: FeedbackForm,businessFeedbackSlug: string) =>{
     const response = await api.post(`/feedback/submit/${businessFeedbackSlug}`,formData);

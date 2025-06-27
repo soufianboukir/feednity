@@ -12,7 +12,7 @@ export async function POST(
 
     const slug = params.feedbackSlug
     const body = await req.json()
-    const { rating, comment, name, email } = body
+    const { rating, comment, name, email, questions } = body
 
     try {
         const business = await businessModel.findOne({ feedbackSlug: slug })
@@ -27,6 +27,7 @@ export async function POST(
             comment,
             name,
             email,
+            responses: questions
         })        
 
         await notificationModel.create({

@@ -10,7 +10,7 @@ import { toast } from "sonner";
 
 type Props = {
     params: { feedbackSlug: string }
-  }
+}
   
 export default function Page({ params }: Props) {
 
@@ -46,6 +46,6 @@ export default function Page({ params }: Props) {
     if(loading) return <Loading message="loading feedback form..."/>
 
     if(success) return <div>
-    <UnifiedFeedback businessLogo={businessData?.logo} businessName={businessData?.name} variant={businessData?.activeForm} submit={true} feedbackSlug={params.feedbackSlug}/>
-</div>
+          <UnifiedFeedback businessLogo={businessData?.logo} businessQuestions={businessData?.questions} businessName={businessData?.name} variant={businessData?.activeForm} submit={true} feedbackSlug={params.feedbackSlug}/>
+      </div>
 }

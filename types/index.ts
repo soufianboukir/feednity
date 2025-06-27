@@ -1,3 +1,5 @@
+import { Question } from "@/interface";
+
 export interface Business {
     _id?:string;
     name: string;
@@ -6,6 +8,7 @@ export interface Business {
     description?: string;
     industry?: string;
     logo?: string;
+    questions?: Question[];
     createdAt?: Date;
     updatedAt?: Date;
 }
