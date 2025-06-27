@@ -3,10 +3,10 @@ import businessModel from "@/models/business.model"
 import { NextRequest, NextResponse } from "next/server"
 
 
-export async function GET(_req: NextRequest, { params }: { params: { id: string } }) {
+export async function GET(req: NextRequest, { params }: { params: { id: string } }) {
         await dbConnection()
         const businessId = params.id
-    
+        
         try {
         const business = await businessModel.findById(businessId).select("questions")
     
@@ -15,9 +15,8 @@ export async function GET(_req: NextRequest, { params }: { params: { id: string 
         }
     
         return NextResponse.json({ questions: business.questions })
-        } catch (error) {
-        console.error("Error fetching questions:", error)
-        return NextResponse.json({ error: "Server error" }, { status: 500 })
+        } catch {
+            return NextResponse.json({ error: "Server error" }, { status: 500 })
         }
 }
 
@@ -38,8 +37,7 @@ export async function POST(req: NextRequest, { params }: { params: { id: string 
         await business.save()
 
         return NextResponse.json({ message: "Questions replaced", questions: business.questions })
-    } catch (error) {
-        console.error("Error saving questions:", error)
+    } catch {
         return NextResponse.json({ error: "Server error" }, { status: 500 })
     }
 }
@@ -53,22 +51,21 @@ export async function PUT(req: NextRequest, { params }: { params: { id: string }
         const body = await req.json()
 
         if (!Array.isArray(body.questions)) {
-        return NextResponse.json({ error: "Invalid questions payload" }, { status: 400 })
+            return NextResponse.json({ error: "Invalid questions payload" }, { status: 400 })
         }
 
         const updated = await businessModel.findByIdAndUpdate(
-        businessId,
-        { $set: { questions: body.questions } },
-        { new: true }
+            businessId,
+            { $set: { questions: body.questions } },
+            { new: true }
         )
 
         if (!updated) {
-        return NextResponse.json({ error: "Business not found" }, { status: 404 })
+            return NextResponse.json({ error: "Business not found" }, { status: 404 })
         }
 
         return NextResponse.json({ message: "Questions updated", questions: updated.questions })
-    } catch (error) {
-        console.error("Error updating questions:", error)
+    } catch {
         return NextResponse.json({ error: "Server error" }, { status: 500 })
     }
 }
@@ -77,10 +74,10 @@ export async function DELETE(req: NextRequest, { params }: { params: { id: strin
     await dbConnection()
     const businessId = params.id
     const { index } = await req.json()
-
+    
     try {
         if (typeof index !== "number") {
-        return NextResponse.json({ error: "Missing or invalid index" }, { status: 400 })
+            return NextResponse.json({ error: "Missing or invalid index" }, { status: 400 })
         }
 
         const business = await businessModel.findById(businessId)
@@ -90,8 +87,7 @@ export async function DELETE(req: NextRequest, { params }: { params: { id: strin
         await business.save()
 
         return NextResponse.json({ message: "Question deleted", questions: business.questions })
-    } catch (error) {
-        console.error("Error deleting question:", error)
+    } catch {
         return NextResponse.json({ error: "Server error" }, { status: 500 })
     }
 }

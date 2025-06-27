@@ -16,7 +16,7 @@ import {
 } from "@/components/ui/dialog"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { toast } from 'sonner'
-import { Plus } from 'lucide-react'
+import { Plus, SquarePen } from 'lucide-react'
 import { Question } from '@/interface'
 import { addQuestion } from '@/services/questions'
 
@@ -27,6 +27,9 @@ interface QuestionsFormProps {
   businessId: string | undefined
   questions: Question[]
   onUpdate: (newQuestions: Question[]) => void
+  onAdded: (newQuestions: Question[]) => void 
+  question?: Question
+  update:boolean
 }
 
 export function QuestionsForm({
@@ -35,15 +38,18 @@ export function QuestionsForm({
   businessId,
   questions: initialQuestions,
   onUpdate,
+  onAdded,
+  question,
+  update
 }: QuestionsFormProps) {
     const [questions, setQuestions] = useState<Question[]>([])
     const [editingIndex, setEditingIndex] = useState<number | null>(null)
     const [form, setForm] = useState<Question>({
-        label: '',
-        type: 'text',
-        required: false,
-        order: 1,
-        options: [],
+        label: question?.label || '',
+        type: question?.type || 'text',
+        required: question?.required || false,
+        order: question?.order || questions.length + 1,
+        options: question?.options || [],
     })
 
     useEffect(() => {
@@ -115,9 +121,10 @@ export function QuestionsForm({
         .map((q, idx) => ({ ...q, order: q.order || idx + 1 }))
         .sort((a, b) => a.order - b.order)
 
-        const response = await addQuestion(updated,businessId)
+        const response = await addQuestion(updated,businessId!)
         if(response.status === 200){
             toast.success("New question added successfully")
+            onAdded(updated)
         }
         
         setQuestions(updated)
@@ -128,22 +135,20 @@ export function QuestionsForm({
         resetForm()
     }
 
-    const startEdit = (idx: number) => {
-        setEditingIndex(idx)
-        setForm({ ...questions[idx] })
-    }
-
-    const handleDelete = (idx: number) => {
-        const filtered = questions.filter((_, i) => i !== idx)
-        setQuestions(filtered)
-        onUpdate(filtered)
-        toast.success('Question removed')
-    }
-
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogTrigger asChild>
-        <Plus className='w-8 h-8'/>
+        {
+          update ? 
+          <Button
+              className="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 font-medium text-sm px-3 py-1 rounded-lg border border-blue-200 dark:border-blue-800 bg-blue-50/50 dark:bg-blue-900/20 hover:bg-blue-100 dark:hover:bg-blue-900/40 transition-all shadow-xs hover:shadow-sm flex items-center gap-1"
+              aria-label={`Update question`}
+          >
+              <SquarePen className='w-4 h-4'/>
+          </Button>
+          :
+          <Plus className='w-8 h-8'/>
+        }
       </DialogTrigger>
       <DialogContent className="sm:max-w-[600px]">
         <DialogHeader>
@@ -167,18 +172,6 @@ export function QuestionsForm({
                   {q.type} — Order: {q.order}
                 </div>
               </div>
-              {/* <div className="flex gap-2">
-                <Button size="sm" variant="outline" onClick={() => startEdit(idx)}>
-                  Edit
-                </Button>
-                <Button
-                  size="sm"
-                  variant="destructive"
-                  onClick={() => handleDelete(idx)}
-                >
-                  Delete
-                </Button>
-              </div> */}
             </div>
           ))}
           {questions.length === 0 && (
