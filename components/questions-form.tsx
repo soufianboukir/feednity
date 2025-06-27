@@ -41,7 +41,6 @@ export function QuestionsForm({
   update
 }: QuestionsFormProps) {
     const [questions, setQuestions] = useState<Question[]>([])
-    const [editingIndex, setEditingIndex] = useState<number | null>(null)
     const [form, setForm] = useState<Question>({
         label: question?.label || '',
         type: question?.type || 'text',
@@ -56,12 +55,18 @@ export function QuestionsForm({
     }
 
     const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-        const { name, value, type: fieldType, checked } = e.target
-        setForm(prev => ({
+      const { name, value, type } = e.target
+    
+      setForm(prev => ({
         ...prev,
-        [name]: fieldType === 'checkbox' ? checked : (name === 'order' ? parseInt(value, 10) || 1 : value),
-        }))
+        [name]: type === 'checkbox'
+          ? (e.target as HTMLInputElement).checked
+          : name === 'order'
+            ? parseInt(value, 10) || 1
+            : value,
+      }))
     }
+    
 
     const handleTypeChange = (newType: Question['type']) => {
         setForm(prev => ({
@@ -98,16 +103,26 @@ export function QuestionsForm({
         if (form.type === 'multiple-choice' && (!form.options || form.options.length < 2)) return toast.error('At least two options required')
 
         let updated: Question[]
-        if (editingIndex !== null) {
-          updated = questions.map((q, i) => (i === editingIndex ? { ...form } : q))
+        if (update && question) {
+          updated = questions.map(q => (q.label === question.label && q.order === question.order ? { ...form } : q))
         } else {
           updated = [...questions, form]
         }
 
-        // re-sort by order
-        updated = updated
-        .map((q, idx) => ({ ...q, order: q.order || idx + 1 }))
-        .sort((a, b) => a.order - b.order)
+
+        let baseList = update && question
+        ? questions.filter(q => !(q.label === question.label && q.order === question.order))
+        : [...questions]
+
+        const newOrder = form.order
+        baseList = baseList.map(q => {
+          if (q.order >= newOrder) {
+            return { ...q, order: q.order + 1 }
+          }
+          return q
+        })
+
+        updated = [...baseList, { ...form }].sort((a, b) => a.order - b.order)
 
         if(!update){
           const response = await addQuestion(updated,businessId!)
@@ -261,7 +276,7 @@ export function QuestionsForm({
             <Button variant="outline">Close</Button>
           </DialogClose>
           <Button onClick={handleSubmit}>
-            {editingIndex !== null ? 'Save Changes' : 'Add Question'}
+            {update ? 'Save Changes' : 'Add Question'}
           </Button>
         </DialogFooter>
       </DialogContent>
