@@ -18,6 +18,7 @@ export function NavMain({
     url: string
     icon?: LucideIcon
     proOnly?: boolean
+    coming?: boolean
   }[]
 }) {
   return (
@@ -36,6 +37,11 @@ export function NavMain({
                 {item.proOnly && (
                   <span className="text-[10px] bg-blue-500 text-white px-1.5 py-0.5 rounded font-bold">
                     PRO
+                  </span>
+                )}
+                {item.coming && (
+                  <span className="text-[10px] bg-blue-500 text-white px-1.5 py-0.5 rounded font-bold">
+                    Coming
                   </span>
                 )}
               </Link>

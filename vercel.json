@@ -1,0 +1,9 @@
+{
+    "cron": [
+      {
+        "path": "/api/send-weekly-summary",
+        "schedule": "0 23 * * 0"
+      }
+    ]
+  }
+  

@@ -56,15 +56,15 @@ const BusinessSchema = new Schema<IBusiness>(
         automations: {
             lowRatingEmail: {
                 type: Boolean,
-                default: true,
+                default: false,
             },
             weeklySummaryEmail: {
                 type: Boolean,
-                default: true,
+                default: false,
             },
             autoReplyWithMessage: {
                 type: Boolean,
-                default: true,
+                default: false,
             },
             weeklyPerformanceCompare: {
                 type: Boolean,

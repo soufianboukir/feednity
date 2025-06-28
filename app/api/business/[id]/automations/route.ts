@@ -32,7 +32,7 @@ export async function PATCH(
             return NextResponse.json({ error: "Business not found" }, { status: 404 })
         }
 
-        return NextResponse.json({ success: true, automations: business.automations })
+        return NextResponse.json({ success: true, automations: business.automations, message: 'Automations updated successfully' })
     } catch {
         return NextResponse.json({ error: "Server error" }, { status: 500 })
     }

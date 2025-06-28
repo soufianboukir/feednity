@@ -1,7 +1,9 @@
 import { dbConnection } from '@/config/db'
+import { sendMail } from '@/lib/mail'
 import businessModel from '@/models/business.model'
 import feedbackModel from '@/models/feedback.model'
 import notificationModel from '@/models/notification.model'
+import User from '@/models/user.model'
 import { NextRequest, NextResponse } from 'next/server'
 
 export async function POST(
@@ -20,8 +22,16 @@ export async function POST(
         if (!business) {
             return NextResponse.json({ error: 'Business not found' }, { status: 404 })
         }
+        const user = await User.findById(business.owner.toString())
+                
+        if(user.plan === 'pro' && parseInt(rating) <= 3 && business.automations.lowRatingEmail === true){
+            await sendMail(`New Low Rating Received - Feedback Alert for ${business.name}`,
+                user.email,
+                process.env.EMAIL_USER,
+                `A new customer feedback submission has been received for ${business.name}, and the rating was ${rating}/5`
+            )
+        }
 
-        
         const feedback = await feedbackModel.create({
             business: business._id,
             rating,

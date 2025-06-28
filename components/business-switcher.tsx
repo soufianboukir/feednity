@@ -30,9 +30,9 @@ export function BusinessSwitcher({
 }: {
   busis: {
     name: string
-    feedbackSlug: string
+    feedbackSlug?: string
     industry?: string
-    activeForm: 'select' | 'stars' | 'emojis'
+    activeForm?: 'select' | 'stars' | 'emojis'
   }[]
 }) {
   const { isMobile } = useSidebar()

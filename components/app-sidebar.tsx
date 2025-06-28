@@ -2,7 +2,6 @@
 
 import * as React from "react"
 import {
-  BarChart,
   Download,
   FileText,
   HelpCircle,
@@ -51,16 +50,10 @@ const data = {
       icon: MessageSquare,
     },
     {
-      name: "Analytics",
-      url: "/analytics",
-      icon: BarChart,
-      proOnly: true
-    },
-    {
       name: "Export",
       url: "/export",
       icon: Download,
-      proOnly: true
+      coming: true
     },
     {
       name: "Qrs",
@@ -109,7 +102,7 @@ const data = {
     },
     {
       name: "Feedback",
-      url: "/feedback-for-platform",
+      url: `${process.env.NEXT_PUBLIC_APP_URL}/feedback/H7E9yMP1Cl`,
       icon: Megaphone,
     },
     {
