@@ -59,12 +59,29 @@ export function FeedbackDialog({ feedback }: { feedback: Feedback }) {
             </div>
             
             {feedback.comment && (
-                <div className="grid grid-cols-4 gap-4">
-                <span className="col-span-1 font-semibold text-gray-700 dark:text-gray-300">Comment:</span>
-                <p className="col-span-3 text-gray-700 dark:text-gray-300 p-3 rounded-md break-words">
-                    {feedback.comment}
-                </p>
+                    <div className="grid grid-cols-4 gap-4">
+                    <span className="col-span-1 font-semibold text-gray-700 dark:text-gray-300">Comment:</span>
+                    <p className="col-span-3 text-gray-700 dark:text-gray-300 p-3 rounded-md break-words">
+                        {feedback.comment}
+                    </p>
                 </div>
+            )}
+
+            {feedback.responses && (
+                feedback.responses.map((response,index) => (
+                    <div className="grid grid-cols-4 gap-4" key={index}>
+                        <span className="col-span-1 font-semibold text-gray-700 dark:text-gray-300">{response.label}</span>
+                        <p className="col-span-3 text-gray-700 dark:text-gray-300 p-3 rounded-md break-words">
+                            {
+                                Array.isArray(response.response) ? 
+                                    response.response.map((res) => (
+                                        {res} + ","
+                                    ))
+                                : response.response
+                            }
+                        </p>
+                    </div>
+                ))
             )}
             </div>
 

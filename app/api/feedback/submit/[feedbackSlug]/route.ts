@@ -21,6 +21,7 @@ export async function POST(
             return NextResponse.json({ error: 'Business not found' }, { status: 404 })
         }
 
+        
         const feedback = await feedbackModel.create({
             business: business._id,
             rating,
@@ -28,7 +29,7 @@ export async function POST(
             name,
             email,
             responses: questions
-        })        
+        })
 
         await notificationModel.create({
             recipient: business.owner.toString(),

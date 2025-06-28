@@ -20,3 +20,22 @@ export interface Response {
     label: string;
     response: string | string[];
 }
+
+export interface Automations {
+    lowRatingEmail: {
+        type: string,
+        default: boolean
+    },
+    weeklySummaryEmail: {
+        type: string,
+        default: boolean
+    },
+    autoReplyWithMessage: {
+        type: string,
+        default: boolean
+    },
+    weeklyPerformanceCompare: {
+        type: string,
+        default: boolean
+    }
+}

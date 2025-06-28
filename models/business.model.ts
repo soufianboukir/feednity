@@ -1,4 +1,4 @@
-import { Question } from "@/interface";
+import { Automations, Question } from "@/interface";
 import mongoose, { Schema, Document } from "mongoose";
 import { nanoid } from "nanoid"
 
@@ -11,7 +11,7 @@ export interface IBusiness extends Document {
   logo?: string;
   activeForm: "select" | "stars" | "emojis";
   questions?: Question[];
-  responses?: Response[];
+  automations: Automations;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -53,7 +53,24 @@ const BusinessSchema = new Schema<IBusiness>(
             required: true
         },
         questions: [],
-        responses: [],
+        automations: {
+            lowRatingEmail: {
+                type: Boolean,
+                default: true,
+            },
+            weeklySummaryEmail: {
+                type: Boolean,
+                default: true,
+            },
+            autoReplyWithMessage: {
+                type: Boolean,
+                default: true,
+            },
+            weeklyPerformanceCompare: {
+                type: Boolean,
+                default: false,
+            },
+        },
     },
     {
         timestamps: true,

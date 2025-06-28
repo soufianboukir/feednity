@@ -1,3 +1,4 @@
+import { Response } from "@/interface"
 import mongoose, { Schema, Document } from "mongoose"
 
 export interface Feedback extends Document {
@@ -6,6 +7,7 @@ export interface Feedback extends Document {
     comment?: string
     name: string
     email: string
+    responses?: Response[];
     createdAt: Date
 }
 
@@ -31,7 +33,8 @@ const FeedbackSchema = new Schema<Feedback>(
         },
         email: {
             type: String
-        }
+        },
+        responses: [],
     },
     {
         timestamps: { createdAt: true, updatedAt: false },
