@@ -7,7 +7,6 @@ import {
   HelpCircle,
   LayoutDashboard,
   ListChecks,
-  Mail,
   Megaphone,
   MessageSquare,
   QrCode,
@@ -94,11 +93,6 @@ const data = {
       name: "Getting started",
       url: "/start",
       icon: Rocket,
-    },
-    {
-      name: "Contact support",
-      url: "/contact",
-      icon: Mail,
     },
     {
       name: "Feedback",
