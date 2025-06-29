@@ -13,5 +13,5 @@ export async function middleware(req: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/panel/:path*'],
+  matcher: ['/panel','/feedback','/qr','/customize','/questions','/responses','/autmations'],
 };

@@ -115,7 +115,6 @@ export default function LandingPage() {
         <div className="absolute bottom-1/4 right-1/3 w-64 h-64 bg-pink-100 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-4000 dark:opacity-10"></div>
       </div>
 
-      {/* Header */}
       <header className="relative flex justify-between items-center px-6 py-4 md:px-12 md:py-6 shadow-sm bg-white/80 dark:bg-gray-900/80 backdrop-blur-md sticky top-0 z-50 border-b border-gray-100 dark:border-gray-800">
         <motion.div 
           initial={{ opacity: 0, x: -20 }}
@@ -167,7 +166,6 @@ export default function LandingPage() {
         </motion.div>
       </header>
 
-      {/* Hero */}
       <section className="relative text-center px-6 py-20 md:py-32 max-w-7xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 20 }}

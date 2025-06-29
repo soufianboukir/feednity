@@ -1,8 +1,8 @@
 import { getServerSession } from 'next-auth';
 import { NextResponse } from 'next/server';
-import { authOptions } from '../auth/[...nextauth]/route';
 import User from '@/models/user.model';
 import mongoose from 'mongoose';
+import { authOptions } from '@/lib/authOptions';
 interface PaymentData {
   name: string;
   email: string;

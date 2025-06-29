@@ -3,10 +3,10 @@ import User from '@/models/user.model';
 import { writeFile } from 'fs/promises';
 import { join } from 'path';
 import { randomUUID } from 'crypto';
-import { authOptions } from '../../auth/[...nextauth]/route';
 import { getServerSession } from 'next-auth';
 import { dbConnection } from '@/config/db';
 import cloudinary from '@/lib/cloudinary';
+import { authOptions } from '@/lib/authOptions';
 
 export const config = {
   api: { bodyParser: false },

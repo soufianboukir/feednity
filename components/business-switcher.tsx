@@ -47,7 +47,7 @@ export function BusinessSwitcher({
     if (!activeBusiness && businesses.length > 0) {
       setActiveBusiness(businesses[0])
     }
-  }, [businesses, activeBusiness])
+  }, [businesses, activeBusiness,setActiveBusiness])
 
   const handleBusinessUpdated = (updated: Business) => {
     setBusinesses(prev =>

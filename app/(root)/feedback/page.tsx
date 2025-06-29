@@ -40,33 +40,33 @@ export default function FeedbackPage() {
 
     const businessId = activeBusiness?._id
 
-    const fetchFeedbacks = async () => {
-        if (!businessId) return
-
-        setLoading(true)
-        try {
-            const query = new URLSearchParams()
-            query.set('businessId', businessId)
-            query.set('page', String(page))
-            if (rating) query.set('rating', rating)
-            if (dateFrom) query.set('dateFrom', dateFrom.toISOString())
-            if (dateTo) query.set('dateTo', dateTo.toISOString())
-
-            const response = await feedbackPageData(query.toString())
-            if(response.status === 200){
-                setFeedbacks(response.data.feedbacks)
-                setTotalPages(response.data.totalPages)
-            }
-        } catch (error) {
-            console.error(error)
-        } finally {
-            setLoading(false)
-        }
-    }
-
     useEffect(() => {
+        const fetchFeedbacks = async () => {
+            if (!businessId) return
+    
+            setLoading(true)
+            try {
+                const query = new URLSearchParams()
+                query.set('businessId', businessId)
+                query.set('page', String(page))
+                if (rating) query.set('rating', rating)
+                if (dateFrom) query.set('dateFrom', dateFrom.toISOString())
+                if (dateTo) query.set('dateTo', dateTo.toISOString())
+    
+                const response = await feedbackPageData(query.toString())
+                if (response.status === 200) {
+                    setFeedbacks(response.data.feedbacks)
+                    setTotalPages(response.data.totalPages)
+                }
+            } catch (error) {
+                console.error(error)
+            } finally {
+                setLoading(false)
+            }
+        }
+    
         fetchFeedbacks()
-    }, [page, rating, dateFrom, dateTo])
+    }, [businessId, page, rating, dateFrom, dateTo]) 
 
     if(loading) return <Loading message='Loading your feedbacks...'/>
 

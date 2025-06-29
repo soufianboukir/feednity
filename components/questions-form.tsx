@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect, ChangeEvent } from 'react'
+import { useState, useEffect, ChangeEvent, useCallback } from 'react'
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -50,9 +50,10 @@ export function QuestionsForm({
     })
     
 
-    const resetForm = () => {
-        setForm({ label: '', type: 'text', required: false, order: questions.length + 1, options: [] })
-    }
+    const resetForm = useCallback(() => {
+      setForm({ label: '', type: 'text', required: false, order: questions.length + 1, options: [] });
+    }, [questions.length]);
+    
 
     const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
       const { name, value, type } = e.target
@@ -140,26 +141,28 @@ export function QuestionsForm({
         }
     }
 
-    const initializeForm = () => {
-      if (question) {
-        setForm({
-          label: question.label,
-          type: question.type,
-          required: question.required,
-          order: question.order,
-          options: question.options,
-        })
-      } else {
-        resetForm()
-      }
-    }
-    
     useEffect(() => {
       if (open) {
         setQuestions([...initialQuestions].sort((a, b) => a.order - b.order))
+    
+        const initializeForm = () => {
+          if (question) {
+            setForm({
+              label: question.label,
+              type: question.type,
+              required: question.required,
+              order: question.order,
+              options: question.options,
+            })
+          } else {
+            resetForm()
+          }
+        }
+    
         initializeForm()
       }
-    }, [open, initialQuestions, question])
+    }, [open, initialQuestions, question, resetForm]) 
+    
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>

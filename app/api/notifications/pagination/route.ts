@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getServerSession } from 'next-auth'
-import { authOptions } from '@/app/api/auth/[...nextauth]/route'
 import { dbConnection } from '@/config/db'
 import notificationModel from '@/models/notification.model'
+import { authOptions } from '@/lib/authOptions'
 
 export async function GET(req: NextRequest) {
     await dbConnection()

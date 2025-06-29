@@ -1,11 +1,8 @@
-import { NextRequest, NextResponse } from 'next/server'
+import { NextRequest, NextResponse,RequestEvent } from 'next/server'
 import businessModel from '@/models/business.model'
 
-export async function GET(
-    req: NextRequest,
-    { params }: { params: { slug: string } }
-    ) {
-    const { slug } = params
+export async function GET(req: NextRequest, event: RequestEvent) {
+    const { slug } = event.params;
 
     try {
         const business = await businessModel.findOne({ feedbackSlug:slug })

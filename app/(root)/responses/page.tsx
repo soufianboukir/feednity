@@ -40,32 +40,36 @@ export default function Responses() {
 
     const businessId = activeBusiness?._id
 
-    const fetchFeedbacks = async () => {
-        if (!businessId) return
-
-        setLoading(true)
-        try {
-            const query = new URLSearchParams()
-            query.set('businessId', businessId)
-            query.set('page', String(page))
-            if (rating) query.set('rating', rating)
-
-            const response = await feedbacksWithMails(query.toString())
-            
-            if(response.status === 200){
-                setFeedbacks(response.data.feedbacks)
-                setTotalPages(response.data.totalPages)
-            }
-        } catch (error) {
-            console.error(error)
-        } finally {
-            setLoading(false)
-        }
-    }
 
     useEffect(() => {
-        fetchFeedbacks()
-    }, [page, rating])
+        const fetchFeedbacks = async () => {
+            if (!businessId) return
+    
+            setLoading(true)
+            try {
+                const query = new URLSearchParams()
+                query.set('businessId', businessId)
+                query.set('page', String(page))
+                if (rating) query.set('rating', rating)
+    
+                const response = await feedbacksWithMails(query.toString())
+    
+                if (response.status === 200) {
+                    setFeedbacks(response.data.feedbacks)
+                    setTotalPages(response.data.totalPages)
+                }
+            } catch (error) {
+                console.error(error)
+            } finally {
+                setLoading(false)
+            }
+        }
+    
+        if (businessId) {
+            fetchFeedbacks()
+        }
+    }, [businessId, page, rating])
+    
 
     if(loading || status === 'loading') return <Loading message='Loading your feedbacks...'/>
     if(session?.user.plan === 'free') return router.push('/upgrade-to-pro')

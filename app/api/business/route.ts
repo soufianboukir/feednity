@@ -1,9 +1,9 @@
 import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import Business from "@/models/business.model";
-import { authOptions } from "../auth/[...nextauth]/route";
 import { dbConnection } from "@/config/db";
 import { v2 as cloudinary } from 'cloudinary'
+import { authOptions } from "@/lib/authOptions";
 
 export const GET = async () => {
     try {

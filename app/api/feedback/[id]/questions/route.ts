@@ -1,11 +1,11 @@
 import { dbConnection } from "@/config/db"
 import businessModel from "@/models/business.model"
-import { NextRequest, NextResponse } from "next/server"
+import { NextRequest, NextResponse,RequestEvent } from "next/server"
 
 
-export async function GET(req: NextRequest, { params }: { params: { id: string } }) {
+export async function GET(req: NextRequest, event: RequestEvent) {
+        const businessId = event.params.id;
         await dbConnection()
-        const businessId = params.id
         
         try {
         const business = await businessModel.findById(businessId).select("questions")
@@ -20,9 +20,9 @@ export async function GET(req: NextRequest, { params }: { params: { id: string }
         }
 }
 
-export async function POST(req: NextRequest, { params }: { params: { id: string } }) {
+export async function POST(req: NextRequest, event: RequestEvent) {
     await dbConnection()
-    const businessId = params.id
+    const businessId = event.params.id;
     const body = await req.json()
 
     try {
@@ -43,9 +43,9 @@ export async function POST(req: NextRequest, { params }: { params: { id: string 
 }
 
 
-export async function PUT(req: NextRequest, { params }: { params: { id: string } }) {
+export async function PUT(req: NextRequest, event: RequestEvent) {
     await dbConnection()
-    const businessId = params.id
+    const businessId = event.params.id;
 
     try {
         const body = await req.json()
@@ -70,9 +70,9 @@ export async function PUT(req: NextRequest, { params }: { params: { id: string }
     }
 }
 
-export async function DELETE(req: NextRequest, { params }: { params: { id: string } }) {
+export async function DELETE(req: NextRequest, event: RequestEvent) {
     await dbConnection()
-    const businessId = params.id
+    const businessId = event.params.id;
     const { index } = await req.json()
     
     try {

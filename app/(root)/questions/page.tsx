@@ -30,24 +30,27 @@ export default function Questions() {
     
     const businessId = activeBusiness?._id;
 
+    
     useEffect(() => {
-        const fetchQuestions  = async () =>{
-            try{
+        const fetchQuestions = async () => {
+            try {
                 setLoading(true)
-                const response = await getQuestions(businessId!);
-                if(response.status === 200){
+                const response = await getQuestions(businessId!)
+                if (response.status === 200) {
                     setQuestions(response.data.questions)
                 }
-            }catch{
+            } catch {
                 toast.error('Failed to fetch questions')
-            } finally{
+            } finally {
                 setLoading(false)
             }
         }
-        if(activeBusiness){
+    
+        if (activeBusiness && businessId) {
             fetchQuestions()
         }
-    },[activeBusiness])
+    }, [activeBusiness, businessId])
+    
 
     const onDeleted = (questionIdx: number) =>{
         const newQuestions = questions.filter((question,index) => index !== questionIdx);
