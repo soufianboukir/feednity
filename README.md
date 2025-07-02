@@ -1,4 +1,4 @@
-# Feednity
+* desc# Feednity
 ![Screenshot from 2025-06-29 12-20-47](https://github.com/user-attachments/assets/9dfd656f-23bb-40e3-81ee-00c3c6481fe4)
 
 A web-based platform built with Next.js, MongoDB, and modern web technologies that empowers business owners to collect and analyze customer feedback quickly, efficiently, and contactlessly using QR codes.
@@ -40,5 +40,4 @@ cp .env.example .env
   npm run dev
 ```
 
-<br />
-built with ❤️ by **soufian**.
+<br built with ❤️ by **soufian**.
