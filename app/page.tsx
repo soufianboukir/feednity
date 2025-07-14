@@ -4,8 +4,6 @@ import Link from "next/link"
 import { motion } from "framer-motion"
 import Image from "next/image"
 import { ModeToggle } from "@/components/theme-provider"
-import { getServerSession } from "next-auth"
-import { authOptions } from "@/lib/authOptions"
 import { useSession } from "next-auth/react"
 
 const testimonials = [
