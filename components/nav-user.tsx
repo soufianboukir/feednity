@@ -3,9 +3,7 @@
 import {
   Bell,
   ChevronsUpDown,
-  CreditCard,
   LogOut,
-  Sparkles,
   User,
 } from "lucide-react"
 
@@ -92,24 +90,9 @@ export function NavUser({
               </DropdownMenuLabel>
               <DropdownMenuSeparator />
               <DropdownMenuGroup>
-                <DropdownMenuItem>
-                  <Sparkles className="mr-2 h-4 w-4" />
-                  {
-                    user.plan === 'free' ? 
-                      <Link href={'/upgrade-to-pro'}>Upgrade to pro</Link>
-                    : <Link href={'/upgrade-to-pro'}>Pro features</Link>
-                  }
-                </DropdownMenuItem>
-              </DropdownMenuGroup>
-              <DropdownMenuSeparator />
-              <DropdownMenuGroup>
                 <DropdownMenuItem onSelect={() => setIsProfileOpen(true)}>
                   <User className="mr-2 h-4 w-4" />
                   Edit Profile
-                </DropdownMenuItem>
-                <DropdownMenuItem>
-                  <CreditCard className="mr-2 h-4 w-4" />
-                  Billing
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
                   <Link href="/notifications" className="flex items-center w-full">

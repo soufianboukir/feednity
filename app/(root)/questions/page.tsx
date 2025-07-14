@@ -4,7 +4,6 @@ import { useEffect, useState } from 'react'
 import { SiteHeader } from '@/components/site-header'
 import Loading from '@/components/loading'
 import { useSession } from 'next-auth/react'
-import { useRouter } from 'next/navigation'
 import { Question } from '@/interface'
 import { Button } from '@/components/ui/button'
 import { Clipboard, SquarePen, Trash2, TriangleAlert } from 'lucide-react'
@@ -18,8 +17,7 @@ import { DeleteQuestion } from '@/components/delete-question'
 
 export default function Questions() {
     const { activeBusiness } = useActiveBusiness()
-    const router = useRouter()
-    const { data: session,status } = useSession();
+    const { status } = useSession();
     const [openAdd,setOpenAdd] = useState<boolean>(false)
     const [openDelete,setOpenDelete] = useState<boolean>(false)
     const [openUpdate,setOpenUpdate] = useState<boolean>(false)
@@ -62,7 +60,6 @@ export default function Questions() {
     }
 
     if(status === 'loading' || loading) return <Loading message='Loading your Questions...'/>
-    if(session?.user.plan === 'free') return router.push('/upgrade-to-pro')
 
   return (
     <div>

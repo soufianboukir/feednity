@@ -26,7 +26,6 @@ import Loading from '@/components/loading'
 import { feedbacksWithMails } from '@/services/feedback'
 import { SendResponse } from '@/components/send-response'
 import { useSession } from 'next-auth/react'
-import { useRouter } from 'next/navigation'
 
 export default function Responses() {
     const [feedbacks, setFeedbacks] = useState<Feedback[]>([])
@@ -35,8 +34,7 @@ export default function Responses() {
     const [loading, setLoading] = useState(true)
     const { activeBusiness } = useActiveBusiness()
     const [rating, setRating] = useState<string | undefined>()
-    const router = useRouter()
-    const { data: session,status } = useSession();
+    const { status } = useSession();
 
     const businessId = activeBusiness?._id
 
@@ -72,7 +70,6 @@ export default function Responses() {
     
 
     if(loading || status === 'loading') return <Loading message='Loading your feedbacks...'/>
-    if(session?.user.plan === 'free') return router.push('/upgrade-to-pro')
 
   return (
     <div>

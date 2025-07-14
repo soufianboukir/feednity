@@ -2,7 +2,6 @@
 
 import * as React from "react"
 import {
-  Download,
   FileText,
   HelpCircle,
   LayoutDashboard,
@@ -10,11 +9,8 @@ import {
   Megaphone,
   MessageSquare,
   QrCode,
-  Repeat,
   Reply,
-  Rocket,
   ShieldCheck,
-  Sliders,
 } from "lucide-react"
 
 import { NavUser } from "@/components/nav-user"
@@ -49,38 +45,19 @@ const data = {
       icon: MessageSquare,
     },
     {
-      name: "Export",
-      url: "/export",
-      icon: Download,
-      coming: true
-    },
-    {
       name: "Qrs",
       url: "/qr",
       icon: QrCode,
     },
     {
-      name: "Customization",
-      url: "/customize",
-      icon: Sliders,
-    },
-    {
-      name: "Automations",
-      url: "/automations",
-      icon: Repeat,
-      proOnly: true
-    },
-    {
       name: "Questions",
       url: "/questions",
       icon: ListChecks,
-      proOnly: true
     },
     {
       name: "Responses",
       url: "/responses",
       icon: Reply,
-      proOnly: true
     },
   ],
   navHelp: [
@@ -90,13 +67,8 @@ const data = {
       icon: HelpCircle,
     },
     {
-      name: "Getting started",
-      url: "/start",
-      icon: Rocket,
-    },
-    {
       name: "Feedback",
-      url: `${process.env.NEXT_PUBLIC_APP_URL}/feedback/H7E9yMP1Cl`,
+      url: `${process.env.NEXT_PUBLIC_APP_URL}/feedback/rRSPN-lYQS`,
       icon: Megaphone,
     },
     {
