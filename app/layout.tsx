@@ -17,11 +17,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "Feednity",
-<<<<<<< HEAD
-  description: "Transform customer insights with our seamless QR code feedback system. Get real-time data, beautiful analytics, and actionable insights to grow your business.",
-=======
   description: "Collect and analyze customer feedback in a fast, modern, and contactless way using QR codes & links",
->>>>>>> c53726a775fd815f5f5a65f7418144f2d2657b16
 };
 
 export default function RootLayout({
