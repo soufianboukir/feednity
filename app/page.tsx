@@ -106,6 +106,13 @@ const LandingPage = () =>{
         </motion.div>
       </section>
 
+
+      <div className="fixed bottom-4 left-4 px-4 py-2 bg-white dark:bg-zinc-900 border border-blue-500 shadow-lg animate-fade-in font-semibold rounded-full">
+        <a className="text-sm text-gray-700 dark:text-gray-300" href='https://soufianboukir.com' target='_blank'>
+          Built with ❤️ by <span className="text-blue-600 font-semibold">Soufian</span>
+        </a>
+      </div>
+
           
     
 
